@@ -1,9 +1,7 @@
 package se.torsteneriksson.breadbake
 
-import android.app.ActivityManager
 import android.content.ComponentName
 import android.content.ContentValues.TAG
-import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
 import android.os.Bundle
@@ -16,7 +14,7 @@ import se.torsteneriksson.breadbake.service.RecepiHandler
 
 class BreadBakeMainActivity : AppCompatActivity() {
     private val alarmManager = MyAlarmManager()
-    var iRemoteService: IRecepiHandler? = null
+    var mRecepiHandler: IRecepiHandler? = null
 
     val mConnection = object : ServiceConnection {
 
@@ -26,13 +24,13 @@ class BreadBakeMainActivity : AppCompatActivity() {
             // this gets an instance of the IRemoteInterface, which we can use to call on the service
 
             Toast.makeText(this@BreadBakeMainActivity,"Connected", Toast.LENGTH_LONG).show()
-            iRemoteService = IRecepiHandler.Stub.asInterface(service)
+            mRecepiHandler = IRecepiHandler.Stub.asInterface(service)
         }
 
         // Called when the connection with the service disconnects unexpectedly
         override fun onServiceDisconnected(className: ComponentName) {
             Log.e(TAG, "Service has unexpectedly disconnected")
-            iRemoteService = null
+            mRecepiHandler = null
         }
     }
 
@@ -40,29 +38,27 @@ class BreadBakeMainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_breadbakemain)
-
         Intent(this, RecepiHandler::class.java).also { intent ->
             startService(intent)
-
-        initService()
         }
+        bindToService()
     }
 
     fun startTimer(view: View) {
         //alarmManager.setAlarm(10, this, 4711, 42)
         // Id
-        println("B: RecepiId:" + iRemoteService?.getId())
-        iRemoteService?.setId(88)
-        println("A: RecepiId:" + iRemoteService?.getId())
+        println("B: RecepiId:" + mRecepiHandler?.getId())
+        mRecepiHandler?.setId(88)
+        println("A: RecepiId:" + mRecepiHandler?.getId())
         // State
-        println("B: RecepiState:" + iRemoteService?.getState())
-        iRemoteService?.setState(12)
-        println("A: RecepiIdState:" + iRemoteService?.getState())
+        println("B: RecepiState:" + mRecepiHandler?.getState())
+        mRecepiHandler?.setState(12)
+        println("A: RecepiIdState:" + mRecepiHandler?.getState())
     }
 
 
     /** Function to establish connections with the service, binding by interface names.  */
-    private fun initService() {
+    private fun bindToService() {
 
         val i = Intent()
         i.setClassName(this.packageName, RecepiHandler::class.java.getName())

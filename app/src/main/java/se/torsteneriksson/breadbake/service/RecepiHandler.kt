@@ -8,10 +8,9 @@ import android.util.Log
 import se.torsteneriksson.breadbake.IRecepiHandler
 
 
-
 class RecepiHandler() : Service() {
     var recepiState: Int = 0
-    var recepiId: Int = 99
+    var recepiId: Int = 0
 
     override fun onBind(intent: Intent?): IBinder? {
         return object : IRecepiHandler.Stub() {
