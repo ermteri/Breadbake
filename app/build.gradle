@@ -7,7 +7,7 @@ android {
     buildToolsVersion "30.0.2"
 
     defaultConfig {
-        applicationId "se.torsteneriksson.recepihadler"
+        applicationId "se.torsteneriksson.recepihandler"
         minSdkVersion 24
         targetSdkVersion 30
         versionCode 1

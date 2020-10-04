@@ -12,7 +12,7 @@ open class RecepiStep (open val description: String = "", open val type: STEPTYP
 
 }
 
-class RecepiStepWait (override val description: String, val time: Int = 0):
+class RecepiStepWait (override val description: String, val time: Long = 0):
     RecepiStep(description=description, type=STEPTYPE.TIMER){
 
 
