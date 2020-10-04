@@ -7,7 +7,7 @@ android {
     buildToolsVersion "30.0.2"
 
     defaultConfig {
-        applicationId "se.torsteneriksson.breadbake"
+        applicationId "se.torsteneriksson.recepihadler"
         minSdkVersion 24
         targetSdkVersion 30
         versionCode 1

@@ -1,4 +1,4 @@
-package se.torsteneriksson.breadbake
+package se.torsteneriksson.recepihandler
 
 import org.junit.Test
 

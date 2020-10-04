@@ -1,4 +1,4 @@
-package se.torsteneriksson.breadbake
+package se.torsteneriksson.recepihandler
 
 import android.content.ComponentName
 import android.content.ContentValues.TAG
@@ -10,11 +10,12 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import se.torsteneriksson.breadbake.service.RecepiHandler
+import se.torsteneriksson.recepihandler.R
+import se.torsteneriksson.recepihandler.service.RecepiHandlerService
 
-class BreadBakeMainActivity : AppCompatActivity() {
+class RecepiHandlerMainActivity : AppCompatActivity() {
     private val alarmManager = MyAlarmManager()
-    var mRecepiHandler: IRecepiHandler? = null
+    var mRecepiHandler: IRecepiHandlerService? = null
 
     val mConnection = object : ServiceConnection {
 
@@ -23,8 +24,8 @@ class BreadBakeMainActivity : AppCompatActivity() {
             // Following the example above for an AIDL interface,
             // this gets an instance of the IRemoteInterface, which we can use to call on the service
 
-            Toast.makeText(this@BreadBakeMainActivity,"Connected", Toast.LENGTH_LONG).show()
-            mRecepiHandler = IRecepiHandler.Stub.asInterface(service)
+            Toast.makeText(this@RecepiHandlerMainActivity,"Connected", Toast.LENGTH_LONG).show()
+            mRecepiHandler = IRecepiHandlerService.Stub.asInterface(service)
         }
 
         // Called when the connection with the service disconnects unexpectedly
@@ -37,8 +38,8 @@ class BreadBakeMainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_breadbakemain)
-        Intent(this, RecepiHandler::class.java).also { intent ->
+        setContentView(R.layout.activity_recepihandlermain)
+        Intent(this, RecepiHandlerService::class.java).also { intent ->
             startService(intent)
         }
         bindToService()
@@ -61,10 +62,10 @@ class BreadBakeMainActivity : AppCompatActivity() {
     private fun bindToService() {
 
         val i = Intent()
-        i.setClassName(this.packageName, RecepiHandler::class.java.getName())
+        i.setClassName(this.packageName, RecepiHandlerService::class.java.getName())
         val bindResult = bindService(i, mConnection, BIND_AUTO_CREATE)
         if (bindResult) {
-            Toast.makeText(this@BreadBakeMainActivity,"Bounded!", Toast.LENGTH_LONG).show()
+            Toast.makeText(this@RecepiHandlerMainActivity,"Bounded!", Toast.LENGTH_LONG).show()
         }
     }
 }

@@ -1,19 +1,19 @@
-package se.torsteneriksson.breadbake.service
+package se.torsteneriksson.recepihandler.service
 
 import android.app.Service
 import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.IBinder
 import android.util.Log
-import se.torsteneriksson.breadbake.IRecepiHandler
+import se.torsteneriksson.recepihandler.IRecepiHandlerService
 
 
-class RecepiHandler() : Service() {
+class RecepiHandlerService() : Service() {
     var recepiState: Int = 0
     var recepiId: Int = 0
 
     override fun onBind(intent: Intent?): IBinder? {
-        return object : IRecepiHandler.Stub() {
+        return object : IRecepiHandlerService.Stub() {
             override fun getState(): Int =
                 recepiState
 
