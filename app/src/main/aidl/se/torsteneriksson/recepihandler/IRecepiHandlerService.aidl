@@ -1,15 +1,12 @@
 // IRecepiHandler.aidl
 package se.torsteneriksson.recepihandler;
-
 // Declare any non-default types here with import statements
+import se.torsteneriksson.recepihandler.Recepi;
 
 interface IRecepiHandlerService {
-    /**
-     * Demonstrates some basic types that you can use as parameters
-     * and return values in AIDL.
-     */
-    int getState();
-    int getId();
-    void setState(int state);
-    void setId(int id);
+
+    void addRecepi(in Recepi recepi);
+    Recepi getRecepi();
+    void nextStep();
+    void prevStep();
 }

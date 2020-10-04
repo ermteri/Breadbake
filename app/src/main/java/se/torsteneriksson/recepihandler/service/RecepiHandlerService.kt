@@ -6,27 +6,27 @@ import android.content.Intent
 import android.os.IBinder
 import android.util.Log
 import se.torsteneriksson.recepihandler.IRecepiHandlerService
+import se.torsteneriksson.recepihandler.Recepi
 
 
 class RecepiHandlerService() : Service() {
-    var recepiState: Int = 0
-    var recepiId: Int = 0
+    var mRecepi = Recepi("","",ArrayList())
 
     override fun onBind(intent: Intent?): IBinder? {
         return object : IRecepiHandlerService.Stub() {
-            override fun getState(): Int =
-                recepiState
-
-            override fun getId(): Int =
-                recepiId
-
-
-            override fun setState(state: Int) {
-                recepiState = state
+            override fun getRecepi(): Recepi {
+                return mRecepi
             }
 
-            override fun setId(id: Int) {
-                recepiId = id
+            override fun addRecepi(recepi: Recepi?) {
+                mRecepi = recepi!!
+            }
+
+            override fun nextStep() {
+                mRecepi.nextStep()
+            }
+            override fun prevStep() {
+                mRecepi.prevStep()
             }
         }
     }
