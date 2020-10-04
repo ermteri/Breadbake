@@ -15,7 +15,6 @@ open class RecepiStep (open val description: String = "", open val type: STEPTYP
 class RecepiStepWait (override val description: String, val time: Long = 0):
     RecepiStep(description=description, type=STEPTYPE.TIMER){
 
-
 }
 
 
@@ -51,11 +50,11 @@ class Recepi(val uid: String?, val name: String?, val recepiSteps: ArrayList<Rec
     }
 
     override fun describeContents(): Int {
-        TODO("Not yet implemented")
+        return 0
     }
 
     override fun writeToParcel(dest: Parcel?, flags: Int) {
-        TODO("Not yet implemented")
+        dest?.writeString(name)
     }
 
     companion object CREATOR : Parcelable.Creator<Recepi> {
@@ -67,6 +66,4 @@ class Recepi(val uid: String?, val name: String?, val recepiSteps: ArrayList<Rec
             return arrayOfNulls(size)
         }
     }
-
-
 }

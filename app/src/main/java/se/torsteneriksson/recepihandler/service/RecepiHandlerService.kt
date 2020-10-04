@@ -14,7 +14,8 @@ class RecepiHandlerService() : Service() {
     var mRecepi = Recepi("","",ArrayList())
     private val mAlarmManager = MyAlarmManager()
     val COUNTDOWN_BR = "se.torsteneriksson.recepihandler.countdown_br"
-    var mBroadcastIntent = Intent(COUNTDOWN_BR)
+    var broadcastIntent = Intent(COUNTDOWN_BR)
+    var mTimer: CountDownTimer? = null
 
 
     override fun onBind(intent: Intent?): IBinder? {
@@ -47,22 +48,23 @@ class RecepiHandlerService() : Service() {
 
     override fun onDestroy() {
         super.onDestroy()
+        mTimer?.cancel()
         Log.d(TAG, "onDestroy()")
     }
     // ************************* Private methods **************************
     fun startTimer(sec: Long) {
 
-        val timer = object : CountDownTimer( sec * 1000, 1000) {
+        mTimer = object : CountDownTimer( sec * 1000, 1000) {
             override fun onTick(millisUntilFinished: Long) {
-                mBroadcastIntent.putExtra("Message", "Remaining: " + millisUntilFinished/1000);
-                sendBroadcast(mBroadcastIntent)
+                broadcastIntent.putExtra("Message", "Remaining: " + millisUntilFinished/1000);
+                sendBroadcast(broadcastIntent)
             }
 
             override fun onFinish() {
-                mBroadcastIntent.putExtra("Message", "Finished");
-                sendBroadcast(mBroadcastIntent)
+                broadcastIntent.putExtra("Message", "Finished");
+                sendBroadcast(broadcastIntent)
             }
         }
-        timer.start()
+        mTimer?.start()
     }
 }

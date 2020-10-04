@@ -29,21 +29,12 @@ class RecepiHandlerMainActivity : AppCompatActivity() {
 
             Toast.makeText(this@RecepiHandlerMainActivity, "Connected", Toast.LENGTH_LONG).show()
             mRecepiHandler = IRecepiHandlerService.Stub.asInterface(service)
-            storeRecepiInService()
         }
         // Called when the connection with the service disconnects unexpectedly
         override fun onServiceDisconnected(className: ComponentName) {
             Log.e(TAG, "Service has unexpectedly disconnected")
             mRecepiHandler = null
         }
-    }
-
-    fun storeRecepiInService() {
-        var  recepiSteps = ArrayList<RecepiStep>()
-        recepiSteps.add(RecepiStepPrepare("Blanda degen"))
-        recepiSteps.add(RecepiStepWait("Låt jäsa", 30))
-        var recepi: Recepi = Recepi("id1", "bröd1", recepiSteps)
-        mRecepiHandler?.addRecepi(recepi)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,13 +50,13 @@ class RecepiHandlerMainActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         unregisterReceiver(mBroadcastReceiver);
-        Intent(this, RecepiHandlerService::class.java).also { intent ->
-            stopService(intent)
-        }
+        //Intent(this, RecepiHandlerService::class.java).also { intent ->
+        //    stopService(intent)
+        //}
     }
     // ****************** GUI interface **************************
     fun prev(view: View) {
-        val textView: TextView = findViewById(R.id.instruction) as TextView
+        val textView: TextView = findViewById<TextView>(R.id.instruction)
 
         // Test of step
         mRecepiHandler?.prevStep()
@@ -74,7 +65,7 @@ class RecepiHandlerMainActivity : AppCompatActivity() {
         textView.setText(step?.description)
     }
     fun next(view: View) {
-        val textView: TextView = findViewById(R.id.instruction) as TextView
+        val textView: TextView = findViewById<TextView>(R.id.instruction)
 
         // Test of step
         mRecepiHandler?.nextStep()
@@ -82,6 +73,15 @@ class RecepiHandlerMainActivity : AppCompatActivity() {
         val step = recepi?.getCurrentStep()
         textView.setText(step?.description)
     }
+
+    fun fetch(view: View) {
+        val textView: TextView = findViewById<TextView>(R.id.instruction)
+        storeRecepiInService()
+        val recepi = mRecepiHandler?.getRecepi()
+        val step = recepi?.getCurrentStep()
+        textView.setText(step?.description)
+    }
+
 
     // **************************** Private functions *********************************
     // Function to establish connections with the service, binding by interface names.
@@ -93,5 +93,17 @@ class RecepiHandlerMainActivity : AppCompatActivity() {
         if (bindResult) {
             Toast.makeText(this@RecepiHandlerMainActivity, "Bounded!", Toast.LENGTH_LONG).show()
         }
+    }
+
+    // Upload a recepi to the service
+    fun storeRecepiInService() {
+        if (mRecepiHandler?.getRecepi()?.uid == "") {
+            Toast.makeText(this@RecepiHandlerMainActivity, "No active recepi!", Toast.LENGTH_LONG).show()
+        }
+        var  recepiSteps = ArrayList<RecepiStep>()
+        recepiSteps.add(RecepiStepPrepare("Blanda degen"))
+        recepiSteps.add(RecepiStepWait("Låt jäsa", 30))
+        var recepi: Recepi = Recepi("id1", "bröd1", recepiSteps)
+        mRecepiHandler?.addRecepi(recepi)
     }
 }
