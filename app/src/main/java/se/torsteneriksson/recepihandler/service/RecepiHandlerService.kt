@@ -11,7 +11,8 @@ import se.torsteneriksson.recepihandler.*
 
 
 class RecepiHandlerService() : Service() {
-    var mRecepi = Recepi("","",ArrayList())
+    //var mRecepi = Recepi("","",ArrayList())
+    var mRecepi: Recepi? = null
     private val mAlarmManager = MyAlarmManager()
     val COUNTDOWN_BR = "se.torsteneriksson.recepihandler.countdown_br"
     var broadcastIntent = Intent(COUNTDOWN_BR)
@@ -20,23 +21,23 @@ class RecepiHandlerService() : Service() {
 
     override fun onBind(intent: Intent?): IBinder? {
         return object : IRecepiHandlerService.Stub() {
-            override fun getRecepi(): Recepi {
+            override fun getRecepi(): Recepi? {
                 return mRecepi
             }
 
             override fun addRecepi(recepi: Recepi?) {
-                mRecepi = recepi!!
+                mRecepi = recepi
             }
 
             override fun nextStep() {
-                mRecepi.nextStep()
-                if (mRecepi.getCurrentStep().type == STEPTYPE.TIMER) {
-                    val step = mRecepi.getCurrentStep() as RecepiStepWait
-                    startTimer(step.time.toLong())
+                mRecepi?.nextStep()
+                if (mRecepi?.getCurrentStep()?.type == STEPTYPE.TIMER) {
+                    val step = mRecepi?.getCurrentStep() as RecepiStepWait
+                    startTimer(step.time)
                 }
             }
             override fun prevStep() {
-                mRecepi.prevStep()
+                mRecepi?.prevStep()
             }
         }
     }
@@ -61,6 +62,7 @@ class RecepiHandlerService() : Service() {
             }
 
             override fun onFinish() {
+                mRecepi?.nextStep()
                 broadcastIntent.putExtra("Message", "Finished");
                 sendBroadcast(broadcastIntent)
             }

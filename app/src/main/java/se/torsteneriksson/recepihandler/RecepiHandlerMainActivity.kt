@@ -18,6 +18,7 @@ class RecepiHandlerMainActivity : AppCompatActivity() {
         override fun onReceive(context: Context?, intent: Intent?) {
             val textView: TextView = findViewById<TextView>(R.id.timer)
             textView.setText(intent?.getStringExtra("Message"))
+            updateGui()
         }
     }
 
@@ -29,6 +30,7 @@ class RecepiHandlerMainActivity : AppCompatActivity() {
 
             Toast.makeText(this@RecepiHandlerMainActivity, "Connected", Toast.LENGTH_LONG).show()
             mRecepiHandler = IRecepiHandlerService.Stub.asInterface(service)
+            updateGui()
         }
         // Called when the connection with the service disconnects unexpectedly
         override fun onServiceDisconnected(className: ComponentName) {
@@ -82,6 +84,16 @@ class RecepiHandlerMainActivity : AppCompatActivity() {
         textView.setText(step?.description)
     }
 
+    fun clear(view: View) {
+        mRecepiHandler?.addRecepi(null)
+        var instructionView: TextView = findViewById<TextView>(R.id.instruction)
+        instructionView.setText("instruction")
+        val timerView: TextView = findViewById<TextView>(R.id.timer)
+        timerView.setText("timer")
+
+    }
+
+
 
     // **************************** Private functions *********************************
     // Function to establish connections with the service, binding by interface names.
@@ -102,8 +114,24 @@ class RecepiHandlerMainActivity : AppCompatActivity() {
         }
         var  recepiSteps = ArrayList<RecepiStep>()
         recepiSteps.add(RecepiStepPrepare("Blanda degen"))
-        recepiSteps.add(RecepiStepWait("Låt jäsa", 30))
+        recepiSteps.add(RecepiStepWait("Låt jäsa i 10", 10))
+        recepiSteps.add(RecepiStepPrepare("Dags att vika 1:a gången"))
+        recepiSteps.add(RecepiStepWait("Låt jäsa i 20", 10))
+        recepiSteps.add(RecepiStepPrepare("Dags att vika 2:a gången"))
+        recepiSteps.add(RecepiStepWait("Låt jäsa i 20", 10))
+        recepiSteps.add(RecepiStepPrepare("Dags att vika, 3:e och sista gången"))
+        recepiSteps.add(RecepiStepWait("Låt jäsa i 20", 20))
+        recepiSteps.add(RecepiStepPrepare("Färdigt!!"))
+
         var recepi: Recepi = Recepi("id1", "bröd1", recepiSteps)
         mRecepiHandler?.addRecepi(recepi)
+    }
+
+    // Update various fields
+    fun updateGui() {
+        val instruction = findViewById<TextView>(R.id.instruction)
+        var recepi = mRecepiHandler?.getRecepi()
+        if (recepi != null)
+            instruction.setText(recepi.getCurrentStep().description)
     }
 }
