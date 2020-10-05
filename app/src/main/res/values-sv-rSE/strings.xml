@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Recepthanterare</string>
+    <string name="prev">Föregående</string>
+    <string name="next">Nästa</string>
+    <string name="instruction">Instruktion</string>
+    <string name="timer">Klocka</string>
+    <string name="fetch">Hämta</string>
+    <string name="clear">Rensa</string>
+    <string name="no_active_recepi">Inget recept aktivt</string>
+    <string name="recepiTitle">Titel</string>
+</resources>

@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">Recept Handler</string>
+    <string name="prev">Prev</string>
+    <string name="next">Next</string>
+    <string name="instruction">Instruction</string>
+    <string name="timer">Timer</string>
+    <string name="fetch">Fetch</string>
+    <string name="clear">Clear</string>
+    <string name="no_active_recepi">No active recepi!</string>
+    <string name="recepiTitle">Title</string>
 </resources>

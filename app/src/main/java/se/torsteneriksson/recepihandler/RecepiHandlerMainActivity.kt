@@ -28,7 +28,7 @@ class RecepiHandlerMainActivity : AppCompatActivity() {
             // Following the example above for an AIDL interface,
             // this gets an instance of the IRemoteInterface, which we can use to call on the service
 
-            Toast.makeText(this@RecepiHandlerMainActivity, "Connected", Toast.LENGTH_LONG).show()
+            Toast.makeText(this@RecepiHandlerMainActivity, "Connected", Toast.LENGTH_SHORT).show()
             mRecepiHandler = IRecepiHandlerService.Stub.asInterface(service)
             updateGui()
         }
@@ -77,22 +77,25 @@ class RecepiHandlerMainActivity : AppCompatActivity() {
     }
 
     fun fetch(view: View) {
-        val textView: TextView = findViewById<TextView>(R.id.instruction)
+        val title_tv: TextView = findViewById<TextView>(R.id.recepiTitle)
+        val instruction_tv: TextView = findViewById<TextView>(R.id.instruction)
         storeRecepiInService()
         val recepi = mRecepiHandler?.getRecepi()
         val step = recepi?.getCurrentStep()
-        textView.setText(step?.description)
+        instruction_tv.setText(step?.description)
+        title_tv.setText(recepi?.name)
+
     }
 
     fun clear(view: View) {
         mRecepiHandler?.addRecepi(null)
-        var instructionView: TextView = findViewById<TextView>(R.id.instruction)
-        instructionView.setText("instruction")
+        val title_tv: TextView = findViewById<TextView>(R.id.recepiTitle)
+        val instruction_tv: TextView = findViewById<TextView>(R.id.instruction)
         val timerView: TextView = findViewById<TextView>(R.id.timer)
-        timerView.setText("timer")
-
+        title_tv.setText(R.string.recepiTitle)
+        instruction_tv.setText(getString(R.string.instruction))
+        timerView.setText(getString(R.string.timer))
     }
-
 
 
     // **************************** Private functions *********************************
@@ -103,27 +106,27 @@ class RecepiHandlerMainActivity : AppCompatActivity() {
         i.setClassName(this.packageName, RecepiHandlerService::class.java.getName())
         val bindResult = bindService(i, mConnection, BIND_AUTO_CREATE)
         if (bindResult) {
-            Toast.makeText(this@RecepiHandlerMainActivity, "Bounded!", Toast.LENGTH_LONG).show()
+            Toast.makeText(this@RecepiHandlerMainActivity, "Bounded!", Toast.LENGTH_SHORT).show()
         }
     }
 
     // Upload a recepi to the service
     fun storeRecepiInService() {
         if (mRecepiHandler?.getRecepi()?.uid == "") {
-            Toast.makeText(this@RecepiHandlerMainActivity, "No active recepi!", Toast.LENGTH_LONG).show()
+            Toast.makeText(this@RecepiHandlerMainActivity, getString(R.string.no_active_recepi), Toast.LENGTH_SHORT).show()
         }
         var  recepiSteps = ArrayList<RecepiStep>()
         recepiSteps.add(RecepiStepPrepare("Blanda degen"))
         recepiSteps.add(RecepiStepWait("Låt jäsa i 10", 10))
         recepiSteps.add(RecepiStepPrepare("Dags att vika 1:a gången"))
-        recepiSteps.add(RecepiStepWait("Låt jäsa i 20", 10))
+        recepiSteps.add(RecepiStepWait("Låt jäsa i 10", 10))
         recepiSteps.add(RecepiStepPrepare("Dags att vika 2:a gången"))
-        recepiSteps.add(RecepiStepWait("Låt jäsa i 20", 10))
+        recepiSteps.add(RecepiStepWait("Låt jäsa i 10", 10))
         recepiSteps.add(RecepiStepPrepare("Dags att vika, 3:e och sista gången"))
         recepiSteps.add(RecepiStepWait("Låt jäsa i 20", 20))
         recepiSteps.add(RecepiStepPrepare("Färdigt!!"))
 
-        var recepi: Recepi = Recepi("id1", "bröd1", recepiSteps)
+        var recepi: Recepi = Recepi("id1", "Torsten bröd", recepiSteps)
         mRecepiHandler?.addRecepi(recepi)
     }
 
