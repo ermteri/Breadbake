@@ -115,26 +115,18 @@ class RecepiHandlerMainActivity : AppCompatActivity() {
         if (mRecepiHandler?.getRecepi()?.uid == "") {
             Toast.makeText(this@RecepiHandlerMainActivity, getString(R.string.no_active_recepi), Toast.LENGTH_SHORT).show()
         }
-        var  recepiSteps = ArrayList<RecepiStep>()
-        recepiSteps.add(RecepiStepPrepare("Blanda degen"))
-        recepiSteps.add(RecepiStepWait("Låt jäsa i 10", 10))
-        recepiSteps.add(RecepiStepPrepare("Dags att vika 1:a gången"))
-        recepiSteps.add(RecepiStepWait("Låt jäsa i 10", 10))
-        recepiSteps.add(RecepiStepPrepare("Dags att vika 2:a gången"))
-        recepiSteps.add(RecepiStepWait("Låt jäsa i 10", 10))
-        recepiSteps.add(RecepiStepPrepare("Dags att vika, 3:e och sista gången"))
-        recepiSteps.add(RecepiStepWait("Låt jäsa i 20", 20))
-        recepiSteps.add(RecepiStepPrepare("Färdigt!!"))
-
-        var recepi: Recepi = Recepi("id1", "Torsten bröd", recepiSteps)
+        val recepi: Recepi = getRecepi()
         mRecepiHandler?.addRecepi(recepi)
     }
 
     // Update various fields
     fun updateGui() {
+        val title = findViewById<TextView>(R.id.recepiTitle)
         val instruction = findViewById<TextView>(R.id.instruction)
         var recepi = mRecepiHandler?.getRecepi()
         if (recepi != null)
-            instruction.setText(recepi.getCurrentStep().description)
+            title.setText(recepi?.name)
+            instruction.setText(recepi?.getCurrentStep()?.description)
+
     }
 }

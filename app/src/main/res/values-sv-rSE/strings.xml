@@ -9,4 +9,9 @@
     <string name="clear">Rensa</string>
     <string name="no_active_recepi">Inget recept aktivt</string>
     <string name="recepiTitle">Titel</string>
+    <string name="remaining">"Återstår: "</string>
+    <string name="finished">Klar!</string>
+    <string name="alarm">Klart</string>
+    <string name="alarmMessage">Dags för nästa aktivitet!</string>
+    <string name="alarmTitle">Klart!</string>
 </resources>

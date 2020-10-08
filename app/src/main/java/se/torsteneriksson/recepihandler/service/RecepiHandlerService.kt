@@ -45,6 +45,7 @@ class RecepiHandlerService() : Service() {
     override fun onCreate() {
         super.onCreate()
         Log.i(TAG, "onCreate()")
+        createNotificationChannel(this)
     }
 
     override fun onDestroy() {
@@ -57,14 +58,16 @@ class RecepiHandlerService() : Service() {
 
         mTimer = object : CountDownTimer( sec * 1000, 1000) {
             override fun onTick(millisUntilFinished: Long) {
-                broadcastIntent.putExtra("Message", "Remaining: " + millisUntilFinished/1000);
+                broadcastIntent.putExtra("Message", getString(R.string.remaining) +
+                        getHumanFriendlyTime(millisUntilFinished/1000))
                 sendBroadcast(broadcastIntent)
             }
 
             override fun onFinish() {
                 mRecepi?.nextStep()
-                broadcastIntent.putExtra("Message", "Finished");
+                broadcastIntent.putExtra("Message", getString(R.string.finished));
                 sendBroadcast(broadcastIntent)
+                notify(applicationContext, getString(R.string.alarmTitle), getString(R.string.alarmMessage))
             }
         }
         mTimer?.start()

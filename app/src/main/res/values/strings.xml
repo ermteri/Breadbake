@@ -8,4 +8,12 @@
     <string name="clear">Clear</string>
     <string name="no_active_recepi">No active recepi!</string>
     <string name="recepiTitle">Title</string>
+    <string name="remaining">"Remaining: "</string>
+    <string name="finished">Finished!</string>
+    <string name="alarm">Ready</string>
+    <string name="alarmTitle">Ready!</string>
+    <string name="alarmMessage">Time for next activity!</string>
+    <string name="channel_name" translatable="false">RECEPI_NOTIFICATION_CHANNEL</string>
+    <string name="channel_description" translatable="false">The notification channel.</string>
+    <string name="channeld_id" translatable="false">NOTIFICATION_CHANNEL</string>
 </resources>
