@@ -14,4 +14,6 @@
     <string name="alarm">Klart</string>
     <string name="alarmMessage">Dags för nästa aktivitet!</string>
     <string name="alarmTitle">Klart!</string>
+    <string name="svcrunning">Recepi Handler</string>
+    <string name="svcstatus">No recepi</string>
 </resources>

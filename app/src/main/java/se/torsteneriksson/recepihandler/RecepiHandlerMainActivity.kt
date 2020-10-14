@@ -42,8 +42,11 @@ class RecepiHandlerMainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_recepihandlermain)
-        Intent(this, RecepiHandlerService::class.java).also { intent ->
-            startService(intent)
+        val isRunning: Boolean = isMyServiceRunning(this, RecepiHandlerService::class.java.getName())
+        if (!isRunning) {
+            Intent(this, RecepiHandlerService::class.java).also { intent ->
+                startService(intent)
+            }
         }
         bindToService()
         registerReceiver(mBroadcastReceiver, IntentFilter("se.torsteneriksson.recepihandler.countdown_br"));
@@ -84,7 +87,6 @@ class RecepiHandlerMainActivity : AppCompatActivity() {
         val step = recepi?.getCurrentStep()
         instruction_tv.setText(step?.description)
         title_tv.setText(recepi?.name)
-
     }
 
     fun clear(view: View) {

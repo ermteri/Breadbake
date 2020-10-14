@@ -16,4 +16,6 @@
     <string name="channel_name" translatable="false">RECEPI_NOTIFICATION_CHANNEL</string>
     <string name="channel_description" translatable="false">The notification channel.</string>
     <string name="channeld_id" translatable="false">NOTIFICATION_CHANNEL</string>
+    <string name="svcrunning">Recepi Handler</string>
+    <string name="svcstatus">No recepi</string>
 </resources>

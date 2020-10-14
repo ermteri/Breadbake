@@ -1,21 +1,30 @@
 package se.torsteneriksson.recepihandler
 
-import android.R.id.message
-import android.app.Notification
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.PendingIntent
+import android.app.*
 import android.content.Context
-import android.content.Context.*
+import android.content.Context.ACTIVITY_SERVICE
+import android.content.Context.NOTIFICATION_SERVICE
 import android.content.Intent
 import android.media.Ringtone
 import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Build
-import android.provider.Settings.Global.getString
+import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
-import androidx.core.content.ContextCompat.getSystemService
+import androidx.core.content.res.TypedArrayUtils.getText
+import se.torsteneriksson.recepihandler.service.RecepiHandlerService
+import se.torsteneriksson.recepihandler.service.RecepiHandlerService.Companion.startService
 
+
+fun isMyServiceRunning(context: Context, serviceClass:String): Boolean {
+    val manager = context.getSystemService(ACTIVITY_SERVICE) as ActivityManager?
+    for (service in manager!!.getRunningServices(Int.MAX_VALUE)) {
+        if (serviceClass == service.service.className) {
+            return true
+        }
+    }
+    return false
+}
 
 fun getHumanFriendlyTime(secs: Long): String {
     val hours: String = String.format("%02d", secs / 3600)
@@ -25,11 +34,6 @@ fun getHumanFriendlyTime(secs: Long): String {
     return hours + ":" + minutes + ":" + seconds
 }
 
-fun playAlarmOld(context: Context) {
-    var notification: Uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
-    var r: Ringtone = RingtoneManager.getRingtone(context, notification)
-    r.play()
-}
 
 fun createNotificationChannel(context: Context) {
     // Create the NotificationChannel, but only on API 26+ because
@@ -56,16 +60,16 @@ fun notify(context: Context, title: String, message: String) {
     val channelId: String = context.getString(R.string.channeld_id)
     val notificationManager =
         context.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-    val soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
+    val soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE)
     val mBuilder = NotificationCompat.Builder(context, channelId)
-        .setSmallIcon(android.R.drawable.btn_star_big_on)
+        .setSmallIcon(R.drawable.ic_baseline_access_alarm_24)
         .setContentTitle(title)
         .setContentText(message)
         .setSound(soundUri) //This sets the sound to play
         .setContentIntent(pendingIntent)
         .setAutoCancel(true)
     val notification = mBuilder.build()
-    notification.flags = Notification.FLAG_INSISTENT
+    notification.flags = Notification.FLAG_INSISTENT or Notification.FLAG_AUTO_CANCEL
     notificationManager.notify(0, notification)
 }
 
