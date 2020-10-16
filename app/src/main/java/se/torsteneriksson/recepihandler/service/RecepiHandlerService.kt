@@ -21,7 +21,6 @@ import se.torsteneriksson.recepihandler.*
 class RecepiHandlerService() : Service() {
     //var mRecepi = Recepi("","",ArrayList())
     var mRecepi: Recepi? = null
-    private val mAlarmManager = MyAlarmManager()
     val COUNTDOWN_BR = "se.torsteneriksson.recepihandler.countdown_br"
     var mBroadcastIntent = Intent(COUNTDOWN_BR)
     var mTimer: CountDownTimer? = null

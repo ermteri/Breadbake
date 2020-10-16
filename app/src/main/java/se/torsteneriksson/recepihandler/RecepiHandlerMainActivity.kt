@@ -12,7 +12,6 @@ import androidx.appcompat.app.AppCompatActivity
 import se.torsteneriksson.recepihandler.service.RecepiHandlerService
 
 class RecepiHandlerMainActivity : AppCompatActivity() {
-    private val alarmManager = MyAlarmManager()
     var mRecepiHandler: IRecepiHandlerService? = null
     private val mBroadcastReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
