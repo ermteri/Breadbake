@@ -75,26 +75,40 @@ fun notify(context: Context, title: String, message: String) {
 
 fun getRecepi(): Recepi {
     var  recepiSteps = ArrayList<RecepiStep>()
-    recepiSteps.add(RecepiStepPrepare("Blanda degen"))
-    recepiSteps.add(RecepiStepWait("Låt jäsa i 30 min", 1800))
-    recepiSteps.add(RecepiStepPrepare("Dags att vika 1:a gången"))
-    recepiSteps.add(RecepiStepWait("Låt jäsa i 30 min", 1800))
-    recepiSteps.add(RecepiStepPrepare("Dags att vika 2:a gången"))
-    recepiSteps.add(RecepiStepWait("Låt jäsa i 30", 1800))
-    recepiSteps.add(RecepiStepPrepare("Dags att vika, 3:e och sista gången"))
-    recepiSteps.add(RecepiStepWait("Låt jäsa i 1 timme", 3600))
-    recepiSteps.add(RecepiStepPrepare("Baka ut"))
-    recepiSteps.add(RecepiStepWait("Grädda i 15 min", 900))
+    recepiSteps.add(RecepiStepPrepare(
+        """
+        Blanda alla ingredienser utom valnötterna. 
+        När allt är väl blandat, blanda in valnötterna.
+        Låt det sedan jäsa i 30 min
+        """.trimIndent()))
+    recepiSteps.add(RecepiStepWait("Jäsning i 30 min", 1800))
+    recepiSteps.add(RecepiStepPrepare("Dags att vika 1:a gången och sedan 30 min jäsning"))
+    recepiSteps.add(RecepiStepWait("Jäsning i 30 min", 1800))
+    recepiSteps.add(RecepiStepPrepare("Dags att vika 2:a gången och sedan 30 min jäsning"))
+    recepiSteps.add(RecepiStepWait("Jäsning i 30 min", 1800))
+    recepiSteps.add(RecepiStepPrepare("Dags att vika, 3:e och sista gången och sedan 1 tim jäsning"))
+    recepiSteps.add(RecepiStepWait("Jäsning i 1 timme", 3600))
+    recepiSteps.add(RecepiStepPrepare("Baka ut och grädda i 15 min"))
+    recepiSteps.add(RecepiStepWait("Gräddning i 15 min", 900))
     recepiSteps.add(RecepiStepPrepare("Vädra!"))
-    recepiSteps.add(RecepiStepWait("Grädda i 5 min", 300))
+    recepiSteps.add(RecepiStepWait("Gräddning i 5 min", 300))
     recepiSteps.add(RecepiStepPrepare("Vädra"))
-    recepiSteps.add(RecepiStepWait("Grädda i 5 min", 300))
+    recepiSteps.add(RecepiStepWait("Gräddning i 5 min", 300))
     recepiSteps.add(RecepiStepPrepare("Vädra"))
-    recepiSteps.add(RecepiStepWait("Grädda i 5 min", 300))
-    recepiSteps.add(RecepiStepPrepare("Mät tempen"))
-    recepiSteps.add(RecepiStepWait("Möjligen ytterligare 5 min", 300))
+    recepiSteps.add(RecepiStepWait("Gräddning i 5 min", 300))
+    recepiSteps.add(RecepiStepPrepare("Mät tempen och grädda möjligen i ytterligare 5 min"))
+    recepiSteps.add(RecepiStepWait("Gräddnin i 5 min", 300))
     recepiSteps.add(RecepiStepPrepare("Färdigt!!"))
-
-    var recepi: Recepi = Recepi("id1", "Valnötsbröd", recepiSteps)
+    val overAllDescription: String =
+        """
+        Ingredienser:
+        - Jäst 3g
+        - Vetemjöl special 300g
+        - Vatten 300g
+        - Salt 1.5tsk
+        - Rågmjöl 75g
+        - Valnötter 150g
+        """.trimIndent()
+    var recepi: Recepi = Recepi("id1", "Valnötsbröd", overAllDescription, recepiSteps)
     return recepi
 }

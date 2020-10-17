@@ -104,12 +104,15 @@ class RecepiHandlerService() : Service() {
 
             override fun nextStep() {
                 mRecepi?.nextStep()
+                mTimer?.cancel()
                 if (mRecepi?.getCurrentStep()?.type == STEPTYPE.TIMER) {
+                    mTimer?.cancel()
                     val step = mRecepi?.getCurrentStep() as RecepiStepWait
                     startTimer(mRecepi?.name.toString(), step.time)
                 }
             }
             override fun prevStep() {
+                mTimer?.cancel()
                 mRecepi?.prevStep()
             }
         }
@@ -132,11 +135,11 @@ class RecepiHandlerService() : Service() {
         mTimer = object : CountDownTimer(sec * 1000, 1000) {
             @RequiresApi(Build.VERSION_CODES.O)
             override fun onTick(millisUntilFinished: Long) {
-                val message: String =  mRecepi?.getCurrentStep()?.description + ": " +
-                        getHumanFriendlyTime(millisUntilFinished / 1000)
-                mBroadcastIntent.putExtra("Message", message)
+                val time: String = getHumanFriendlyTime(millisUntilFinished / 1000)
+                val extra: String? = mRecepi?.getCurrentStep()?.description
+                mBroadcastIntent.putExtra("Message", time)
                 sendBroadcast(mBroadcastIntent)
-                updateNotification(title, message, false)
+                updateNotification(title, extra + ":" +  time, false)
             }
 
             @RequiresApi(Build.VERSION_CODES.O)

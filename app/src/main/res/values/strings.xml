@@ -1,9 +1,9 @@
 <resources>
-    <string name="app_name">Recept Handler</string>
+    <string name="app_name">Recepi Handler</string>
     <string name="prev">Prev</string>
     <string name="next">Next</string>
     <string name="instruction">Instruction</string>
-    <string name="timer">Timer</string>
+    <string name="timer" translatable="false">00:00:00</string>
     <string name="fetch">Fetch</string>
     <string name="clear">Clear</string>
     <string name="no_active_recepi">No active recepi!</string>
@@ -18,4 +18,6 @@
     <string name="channeld_id" translatable="false">NOTIFICATION_CHANNEL</string>
     <string name="svcrunning">Recepi Handler</string>
     <string name="svcstatus">No recepi</string>
+    <string name="ingridients">Ingridients</string>
+    <string name="todo">TODO</string>
 </resources>

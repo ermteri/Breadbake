@@ -6,16 +6,18 @@ import android.os.Bundle
 import android.os.IBinder
 import android.util.Log
 import android.view.View
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import se.torsteneriksson.recepihandler.service.RecepiHandlerService
+import kotlin.math.roundToInt
 
 class RecepiHandlerMainActivity : AppCompatActivity() {
     var mRecepiHandler: IRecepiHandlerService? = null
     private val mBroadcastReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
-            val textView: TextView = findViewById<TextView>(R.id.timer)
+            val textView: TextView = findViewById<TextView>(R.id.id_timer)
             textView.setText(intent?.getStringExtra("Message"))
             updateGui()
         }
@@ -60,42 +62,37 @@ class RecepiHandlerMainActivity : AppCompatActivity() {
     }
     // ****************** GUI interface **************************
     fun prev(view: View) {
-        val textView: TextView = findViewById<TextView>(R.id.instruction)
+        val textView: TextView = findViewById<TextView>(R.id.id_stepinstruction)
 
         // Test of step
         mRecepiHandler?.prevStep()
         var recepi = mRecepiHandler?.getRecepi()
         val step = recepi?.getCurrentStep()
-        textView.setText(step?.description)
+        updateGui()
     }
     fun next(view: View) {
-        val textView: TextView = findViewById<TextView>(R.id.instruction)
+        val textView: TextView = findViewById<TextView>(R.id.id_stepinstruction)
 
         // Test of step
         mRecepiHandler?.nextStep()
         var recepi = mRecepiHandler?.getRecepi()
         val step = recepi?.getCurrentStep()
-        textView.setText(step?.description)
+        updateGui()
     }
 
     fun fetch(view: View) {
-        val title_tv: TextView = findViewById<TextView>(R.id.recepiTitle)
-        val instruction_tv: TextView = findViewById<TextView>(R.id.instruction)
         storeRecepiInService()
-        val recepi = mRecepiHandler?.getRecepi()
-        val step = recepi?.getCurrentStep()
-        instruction_tv.setText(step?.description)
-        title_tv.setText(recepi?.name)
+        updateGui()
     }
 
+    fun start(view: View) {
+        val recepi = mRecepiHandler?.getRecepi()
+        recepi?.nextStep()
+        updateGui()
+    }
     fun clear(view: View) {
         mRecepiHandler?.addRecepi(null)
-        val title_tv: TextView = findViewById<TextView>(R.id.recepiTitle)
-        val instruction_tv: TextView = findViewById<TextView>(R.id.instruction)
-        val timerView: TextView = findViewById<TextView>(R.id.timer)
-        title_tv.setText(R.string.recepiTitle)
-        instruction_tv.setText(getString(R.string.instruction))
-        timerView.setText(getString(R.string.timer))
+        updateGui()
     }
 
 
@@ -122,12 +119,26 @@ class RecepiHandlerMainActivity : AppCompatActivity() {
 
     // Update various fields
     fun updateGui() {
-        val title = findViewById<TextView>(R.id.recepiTitle)
-        val instruction = findViewById<TextView>(R.id.instruction)
+        val title = findViewById<TextView>(R.id.id_recepi_title)
+        val overallDescription = findViewById<TextView>(R.id.id_overall_description)
+        val stepinstruction = findViewById<TextView>(R.id.id_stepinstruction)
+        val progressbar = findViewById<ProgressBar>(R.id.id_step_progress)
+        val timer = findViewById<TextView>(R.id.id_timer)
         var recepi = mRecepiHandler?.getRecepi()
-        if (recepi != null)
+        if (recepi != null) {
             title.setText(recepi?.name)
-            instruction.setText(recepi?.getCurrentStep()?.description)
-
+            overallDescription.setText(recepi?.ingridients)
+            stepinstruction.setText(recepi?.getCurrentStep()?.description)
+            if (recepi?.getCurrentStep() is RecepiStepPrepare)
+                timer.setText(getString(R.string.timer))
+            val p = recepi.progress()
+            progressbar.setProgress(recepi.progress().roundToInt())
+        } else {
+            title.setText(getString(R.string.recepiTitle))
+            overallDescription.setText(getString(R.string.ingridients))
+            stepinstruction.setText(getString(R.string.instruction))
+            progressbar.setProgress(0)
+            timer.setText(getString(R.string.timer))
+        }
     }
 }

@@ -23,21 +23,25 @@ class RecepiStepPrepare (override val description: String):
 
 }
 
-class Recepi(val uid: String?, val name: String?, val recepiSteps: ArrayList<RecepiStep>): Parcelable {
+class Recepi(val uid: String?, val name: String?, val ingridients: String?,
+             val recepiSteps: ArrayList<RecepiStep>): Parcelable {
     constructor(parcel: Parcel) : this(
+        parcel.readString(),
         parcel.readString(),
         parcel.readString(),
         TODO("recepiSteps")
     ) {
     }
-    var mCurrentStep: Int = 0
+    var mCurrentStep: Int = -1
 
-    fun getCurrentStep(): RecepiStep {
-        if (mCurrentStep < recepiSteps.size)
-            return recepiSteps[mCurrentStep]
-        else
-            return recepiSteps[recepiSteps.size - 1]
+    fun getCurrentStep(): RecepiStep? {
+        when {
+            mCurrentStep == -1 -> return null
+            mCurrentStep < recepiSteps.size -> return recepiSteps[mCurrentStep]
+        }
+        return recepiSteps[recepiSteps.size - 1]
     }
+
     fun nextStep() {
         if (mCurrentStep < recepiSteps.size - 1) {
             mCurrentStep++
@@ -47,6 +51,9 @@ class Recepi(val uid: String?, val name: String?, val recepiSteps: ArrayList<Rec
         if (mCurrentStep > 0) {
             mCurrentStep--
         }
+    }
+    fun progress(): Float {
+        return ((mCurrentStep.toFloat()+1)/recepiSteps.size * 100)
     }
 
     override fun describeContents(): Int {
