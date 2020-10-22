@@ -20,4 +20,8 @@
     <string name="svcstatus">No recepi</string>
     <string name="ingridients">Ingridients</string>
     <string name="todo">TODO</string>
+    <string name="delete">Delete recepi</string>
+    <string name="delete_recepi">Do you want to delete current recepi?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 </resources>

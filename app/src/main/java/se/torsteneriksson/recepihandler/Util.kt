@@ -4,16 +4,21 @@ import android.app.*
 import android.content.Context
 import android.content.Context.ACTIVITY_SERVICE
 import android.content.Context.NOTIFICATION_SERVICE
+import android.content.DialogInterface
 import android.content.Intent
 import android.media.Ringtone
 import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Build
+import android.renderscript.ScriptGroup
+import android.view.View
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.content.res.TypedArrayUtils.getText
 import se.torsteneriksson.recepihandler.service.RecepiHandlerService
 import se.torsteneriksson.recepihandler.service.RecepiHandlerService.Companion.startService
+import android.icu.util.Output as Output1
 
 
 fun isMyServiceRunning(context: Context, serviceClass:String): Boolean {
@@ -79,7 +84,7 @@ fun getRecepi(): Recepi {
         """
         Blanda alla ingredienser utom valnötterna. 
         När allt är väl blandat, blanda in valnötterna.
-        Låt det sedan jäsa i 30 min
+        Låt det sedan jäsa i 30 min.
         """.trimIndent()))
     recepiSteps.add(RecepiStepWait("Jäsning i 30 min", 1800))
     recepiSteps.add(RecepiStepPrepare("Dags att vika 1:a gången och sedan 30 min jäsning"))
@@ -97,7 +102,7 @@ fun getRecepi(): Recepi {
     recepiSteps.add(RecepiStepPrepare("Vädra"))
     recepiSteps.add(RecepiStepWait("Gräddning i 5 min", 300))
     recepiSteps.add(RecepiStepPrepare("Mät tempen och grädda möjligen i ytterligare 5 min"))
-    recepiSteps.add(RecepiStepWait("Gräddnin i 5 min", 300))
+    recepiSteps.add(RecepiStepWait("Gräddning i 5 min", 300))
     recepiSteps.add(RecepiStepPrepare("Färdigt!!"))
     val overAllDescription: String =
         """
@@ -111,4 +116,20 @@ fun getRecepi(): Recepi {
         """.trimIndent()
     var recepi: Recepi = Recepi("id1", "Valnötsbröd", overAllDescription, recepiSteps)
     return recepi
+}
+
+fun showAlertDialog(context: Context, title: String, message: String):
+        AlertDialog {
+    val alertDialog: AlertDialog.Builder = AlertDialog.Builder(context)
+    alertDialog.setTitle(title)
+    alertDialog.setMessage(message)
+    alertDialog.setPositiveButton(context.getString(R.string.yes)) {
+            dialog, whichButton -> dialog.dismiss()
+    }
+    alertDialog.setNegativeButton(context.getString(R.string.no)) {
+            dialog, whichButton -> dialog.dismiss()
+    }
+    val alert: AlertDialog = alertDialog.create()
+    alert.setCanceledOnTouchOutside(false)
+    return alert
 }

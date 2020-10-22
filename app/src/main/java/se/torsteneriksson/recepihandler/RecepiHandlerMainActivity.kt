@@ -6,9 +6,11 @@ import android.os.Bundle
 import android.os.IBinder
 import android.util.Log
 import android.view.View
+import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import se.torsteneriksson.recepihandler.service.RecepiHandlerService
 import kotlin.math.roundToInt
@@ -81,6 +83,10 @@ class RecepiHandlerMainActivity : AppCompatActivity() {
     }
 
     fun fetch(view: View) {
+        val intent = Intent(this, RecepiSelectorActivity::class.java)
+        val bundle: Bundle = Bundle()
+        bundle.putStringArray("myData", arrayOf("kalle", "pelle", "olle"))
+        startActivity(intent, bundle)
         storeRecepiInService()
         updateGui()
     }
@@ -91,6 +97,14 @@ class RecepiHandlerMainActivity : AppCompatActivity() {
         updateGui()
     }
     fun clear(view: View) {
+        val alert = showAlertDialog(this, getString(R.string.delete), getString(R.string.delete_recepi))
+        alert.show()
+        val ok: Button = alert.getButton(AlertDialog.BUTTON_POSITIVE)
+        ok.setOnClickListener { this.deleteRecepi(alert) }
+    }
+
+    fun deleteRecepi(alert: android.app.AlertDialog) {
+        alert.dismiss()
         mRecepiHandler?.addRecepi(null)
         updateGui()
     }
