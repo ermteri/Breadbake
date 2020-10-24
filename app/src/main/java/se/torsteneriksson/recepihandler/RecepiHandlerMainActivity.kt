@@ -1,5 +1,6 @@
 package se.torsteneriksson.recepihandler
 
+import android.app.Activity
 import android.content.*
 import android.content.ContentValues.TAG
 import android.os.Bundle
@@ -12,11 +13,13 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import kotlinx.android.synthetic.main.recepirow_layout.*
 import se.torsteneriksson.recepihandler.service.RecepiHandlerService
 import kotlin.math.roundToInt
 
 class RecepiHandlerMainActivity : AppCompatActivity() {
     var mRecepiHandler: IRecepiHandlerService? = null
+
     private val mBroadcastReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             val textView: TextView = findViewById<TextView>(R.id.id_timer)
@@ -62,6 +65,20 @@ class RecepiHandlerMainActivity : AppCompatActivity() {
         //    stopService(intent)
         //}
     }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        // Check which request we're responding to
+        if (requestCode == PICK_RECEPI_REQUEST) {
+            // Make sure the request was successful
+            if (resultCode == Activity.RESULT_OK) {
+                // The user picked a recepi.
+                val recepi: String = data?.action as String
+                storeRecepiInService(recepi)
+                updateGui()
+            }
+        }
+    }
     // ****************** GUI interface **************************
     fun prev(view: View) {
         val textView: TextView = findViewById<TextView>(R.id.id_stepinstruction)
@@ -82,12 +99,16 @@ class RecepiHandlerMainActivity : AppCompatActivity() {
         updateGui()
     }
 
-    fun fetch(view: View) {
+    fun showRecepiList(view: View) {
         val intent = Intent(this, RecepiSelectorActivity::class.java)
         val bundle: Bundle = Bundle()
         bundle.putStringArray("myData", arrayOf("kalle", "pelle", "olle"))
-        startActivity(intent, bundle)
-        storeRecepiInService()
+        startActivityForResult(intent, PICK_RECEPI_REQUEST, bundle)
+        //startActivity(intent, bundle)
+    }
+
+    fun fetch(selected: String) {
+        storeRecepiInService(selected)
         updateGui()
     }
 
@@ -123,11 +144,11 @@ class RecepiHandlerMainActivity : AppCompatActivity() {
     }
 
     // Upload a recepi to the service
-    fun storeRecepiInService() {
+    fun storeRecepiInService(recepi: String) {
         if (mRecepiHandler?.getRecepi()?.uid == "") {
             Toast.makeText(this@RecepiHandlerMainActivity, getString(R.string.no_active_recepi), Toast.LENGTH_SHORT).show()
         }
-        val recepi: Recepi = getRecepi()
+        val recepi: Recepi = getRecepi(recepi) as Recepi
         mRecepiHandler?.addRecepi(recepi)
     }
 

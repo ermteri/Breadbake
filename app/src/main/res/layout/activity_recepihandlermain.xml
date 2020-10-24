@@ -16,7 +16,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:elevation="10sp"
-        android:onClick="fetch"
+        android:onClick="showRecepiList"
         android:src="@drawable/ic_baseline_arrow_drop_down_circle_24"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

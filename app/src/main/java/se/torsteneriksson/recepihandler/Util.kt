@@ -20,6 +20,7 @@ import se.torsteneriksson.recepihandler.service.RecepiHandlerService
 import se.torsteneriksson.recepihandler.service.RecepiHandlerService.Companion.startService
 import android.icu.util.Output as Output1
 
+const val PICK_RECEPI_REQUEST = 1
 
 fun isMyServiceRunning(context: Context, serviceClass:String): Boolean {
     val manager = context.getSystemService(ACTIVITY_SERVICE) as ActivityManager?
@@ -78,7 +79,15 @@ fun notify(context: Context, title: String, message: String) {
     notificationManager.notify(0, notification)
 }
 
-fun getRecepi(): Recepi {
+fun getRecepi(recepi: String): Recepi? {
+    when(recepi){
+        "Valnötsbröd" -> return getValnotsbrod()
+        "Torsten Bröd" -> return getTorstenBrod()
+        else -> return null
+    }
+}
+
+fun getValnotsbrod(): Recepi {
     var  recepiSteps = ArrayList<RecepiStep>()
     recepiSteps.add(RecepiStepPrepare(
         """
@@ -115,6 +124,39 @@ fun getRecepi(): Recepi {
         - Valnötter 150g
         """.trimIndent()
     var recepi: Recepi = Recepi("id1", "Valnötsbröd", overAllDescription, recepiSteps)
+    return recepi
+}
+
+fun getTorstenBrod(): Recepi {
+    var  recepiSteps = ArrayList<RecepiStep>()
+    recepiSteps.add(RecepiStepPrepare(
+        """
+        Blanda alla ingredienser. 
+        När allt är väl blandat låt jäsa i 8-10 tim (gärna över natten).
+        """.trimIndent()))
+    recepiSteps.add(RecepiStepWait("Jäsning i 8-10 timmar", 36000))
+    recepiSteps.add(RecepiStepPrepare("Dags att vika 1:a gången och sedan 30 min jäsning"))
+    recepiSteps.add(RecepiStepWait("Jäsning i 30 min", 1800))
+    recepiSteps.add(RecepiStepPrepare("Baka ut och grädda i 15 min"))
+    recepiSteps.add(RecepiStepWait("Gräddning i 15 min", 900))
+    recepiSteps.add(RecepiStepPrepare("Vädra!"))
+    recepiSteps.add(RecepiStepWait("Gräddning i 5 min", 300))
+    recepiSteps.add(RecepiStepPrepare("Vädra"))
+    recepiSteps.add(RecepiStepWait("Gräddning i 5 min", 300))
+    recepiSteps.add(RecepiStepPrepare("Vädra"))
+    recepiSteps.add(RecepiStepWait("Gräddning i 5 min", 300))
+    recepiSteps.add(RecepiStepPrepare("Mät tempen och grädda möjligen i ytterligare 5 min"))
+    recepiSteps.add(RecepiStepWait("Gräddning i 5 min", 300))
+    recepiSteps.add(RecepiStepPrepare("Färdigt!!"))
+    val overAllDescription: String =
+        """
+        Ingredienser:
+        - Jäst 3g
+        - Vetemjöl special 300g
+        - Vatten 300g
+        - Salt 1.5tsk
+        """.trimIndent()
+    var recepi: Recepi = Recepi("id2", "Torsten Bröd", overAllDescription, recepiSteps)
     return recepi
 }
 
