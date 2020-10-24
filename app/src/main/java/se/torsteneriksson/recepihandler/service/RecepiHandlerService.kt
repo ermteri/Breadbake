@@ -99,7 +99,7 @@ class RecepiHandlerService() : Service() {
                 }
                 else
                     startForeground(ONGOING_NOTIFICATION_ID,
-                        getMyActivityNotification(getString(R.string.no_active_recepi), "", false))
+                        getMyActivityNotification(recepi.name as String, "", false))
             }
 
             override fun nextStep() {
