@@ -17,9 +17,9 @@
     <string name="svcstatus">Tomt</string>
     <string name="ingridients">Ingredienser</string>
     <string name="todo">TODO</string>
-    <string name="delete">Delete recepi</string>
-    <string name="delete_recepi">Do you want to delete current recepi?</string>
-    <string name="yes">Yes</string>
-    <string name="no">No</string>
-    <string name="recepi_selector_title">Select recepi!</string>
+    <string name="delete">Ta bort recept</string>
+    <string name="delete_recepi">Vill du ta bort nuvarande recept?</string>
+    <string name="yes">Ja</string>
+    <string name="no">Nej</string>
+    <string name="recepi_selector_title">Välj recept!</string>
 </resources>

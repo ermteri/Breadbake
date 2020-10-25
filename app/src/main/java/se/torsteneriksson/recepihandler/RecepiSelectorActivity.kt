@@ -3,16 +3,12 @@ package se.torsteneriksson.recepihandler
 
 import android.app.Activity
 import android.content.Intent
-import android.graphics.ColorSpace
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
@@ -22,7 +18,8 @@ interface CellClickListener {
 }
 
 class Model(
-    val recepiName: String,
+    val recepiName: String?,
+    val recepiSlogan: String?,
     val recepiImage: Int
 )
 
@@ -35,11 +32,11 @@ class RecepiSelectorActivity : AppCompatActivity(), CellClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_recepi_selector)
         getSupportActionBar()?.setTitle(getString(R.string.recepi_selector_title))
-        val extras = intent.getBundleExtra("myData")
-        val myDataSet: Array<Model> = arrayOf(
-            Model("Valnötsbröd", 0),
-            Model( "Torsten Bröd", 1),
-            Model( "Stinas skorpor", 2))
+        val recepiList = getRecepiList()
+        var myDataSet: ArrayList<Model> = arrayListOf()
+        for (recepi in recepiList) {
+            myDataSet.add(Model(recepi.name, recepi.slogan, 0))
+        }
 
         viewManager = LinearLayoutManager(this)
         viewAdapter = MyAdapter(myDataSet, this)
@@ -64,7 +61,7 @@ class RecepiSelectorActivity : AppCompatActivity(), CellClickListener {
     }
 }
 
-class MyAdapter(private val myDataset: Array<Model>, private val cellClickListener: CellClickListener) :
+class MyAdapter(private val myDataset: ArrayList<Model>, private val cellClickListener: CellClickListener) :
     RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
 
     // Provide a reference to the views for each data item
@@ -91,9 +88,12 @@ class MyAdapter(private val myDataset: Array<Model>, private val cellClickListen
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        val tv = holder.rowView.findViewById<TextView>(R.id.id_recepi_row_tv)
+        val title = holder.rowView.findViewById<TextView>(R.id.id_recepi_title)
+        val slogan = holder.rowView.findViewById<TextView>(R.id.id_recepi_slogan_tv)
+
         val data = myDataset[position]
-        tv.setText(data.recepiName)
+        title.setText(data.recepiName)
+        slogan.setText(data.recepiSlogan)
         holder.itemView.setOnClickListener {
             cellClickListener.onCellClickListener(data)
         }

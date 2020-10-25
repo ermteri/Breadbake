@@ -23,9 +23,10 @@ class RecepiStepPrepare (override val description: String):
 
 }
 
-class Recepi(val uid: String?, val name: String?, val ingridients: String?,
+class Recepi(val uid: String?, val name: String?, val slogan: String?, val ingridients: String?,
              val recepiSteps: ArrayList<RecepiStep>): Parcelable {
     constructor(parcel: Parcel) : this(
+        parcel.readString(),
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),

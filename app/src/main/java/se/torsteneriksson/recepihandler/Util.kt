@@ -4,21 +4,10 @@ import android.app.*
 import android.content.Context
 import android.content.Context.ACTIVITY_SERVICE
 import android.content.Context.NOTIFICATION_SERVICE
-import android.content.DialogInterface
 import android.content.Intent
-import android.media.Ringtone
 import android.media.RingtoneManager
-import android.net.Uri
 import android.os.Build
-import android.renderscript.ScriptGroup
-import android.view.View
-import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
-import androidx.core.content.res.TypedArrayUtils.getText
-import se.torsteneriksson.recepihandler.service.RecepiHandlerService
-import se.torsteneriksson.recepihandler.service.RecepiHandlerService.Companion.startService
-import android.icu.util.Output as Output1
 
 const val PICK_RECEPI_REQUEST = 1
 
@@ -79,6 +68,14 @@ fun notify(context: Context, title: String, message: String) {
     notificationManager.notify(0, notification)
 }
 
+
+fun getRecepiList(): ArrayList<Recepi> {
+    var recepiList: ArrayList<Recepi> = ArrayList()
+    recepiList.add(getTorstenBrod())
+    recepiList.add(getValnotsbrod())
+    return recepiList
+}
+
 fun getRecepi(recepi: String): Recepi? {
     when(recepi){
         "Valnötsbröd" -> return getValnotsbrod()
@@ -113,7 +110,7 @@ fun getValnotsbrod(): Recepi {
     recepiSteps.add(RecepiStepPrepare("Mät tempen och grädda möjligen i ytterligare 5 min"))
     recepiSteps.add(RecepiStepWait("Gräddning i 5 min", 300))
     recepiSteps.add(RecepiStepPrepare("Färdigt!!"))
-    val overAllDescription: String =
+    val ingridients: String =
         """
         Ingredienser:
         - Jäst 3g
@@ -123,7 +120,12 @@ fun getValnotsbrod(): Recepi {
         - Rågmjöl 75g
         - Valnötter 150g
         """.trimIndent()
-    var recepi: Recepi = Recepi("id1", "Valnötsbröd", overAllDescription, recepiSteps)
+    var recepi: Recepi = Recepi(
+        "id1",
+        "Valnötsbröd",
+        "Dyrt, men kostar det så smakar det!",
+        ingridients,
+        recepiSteps)
     return recepi
 }
 
@@ -148,7 +150,7 @@ fun getTorstenBrod(): Recepi {
     recepiSteps.add(RecepiStepPrepare("Mät tempen och grädda möjligen i ytterligare 5 min"))
     recepiSteps.add(RecepiStepWait("Gräddning i 5 min", 300))
     recepiSteps.add(RecepiStepPrepare("Färdigt!!"))
-    val overAllDescription: String =
+    val ingridients: String =
         """
         Ingredienser:
         - Jäst 3g
@@ -156,7 +158,12 @@ fun getTorstenBrod(): Recepi {
         - Vatten 300g
         - Salt 1.5tsk
         """.trimIndent()
-    var recepi: Recepi = Recepi("id2", "Torsten Bröd", overAllDescription, recepiSteps)
+    var recepi: Recepi = Recepi(
+        "id2",
+        "Torsten Bröd",
+        "Ett enkelt gott bröd",
+        ingridients,
+        recepiSteps)
     return recepi
 }
 
