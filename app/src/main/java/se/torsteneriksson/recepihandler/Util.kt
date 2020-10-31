@@ -116,7 +116,7 @@ fun getValnotsbrod(): Recepi {
         - Jäst 3g
         - Vetemjöl special 300g
         - Vatten 300g
-        - Salt 1.5tsk
+        - Salt 1,5tsk
         - Rågmjöl 75g
         - Valnötter 150g
         """.trimIndent()
@@ -124,6 +124,7 @@ fun getValnotsbrod(): Recepi {
         "id1",
         "Valnötsbröd",
         "Dyrt, men kostar det så smakar det!",
+        R.drawable.valnotsbrod,
         ingridients,
         recepiSteps)
     return recepi
@@ -156,12 +157,13 @@ fun getTorstenBrod(): Recepi {
         - Jäst 3g
         - Vetemjöl special 300g
         - Vatten 300g
-        - Salt 1.5tsk
+        - Salt 1,5tsk
         """.trimIndent()
     var recepi: Recepi = Recepi(
         "id2",
         "Torsten Bröd",
         "Ett enkelt gott bröd",
+        R.drawable.torsten_brod,
         ingridients,
         recepiSteps)
     return recepi

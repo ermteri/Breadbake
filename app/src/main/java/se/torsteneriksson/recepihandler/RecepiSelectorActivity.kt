@@ -35,7 +35,7 @@ class RecepiSelectorActivity : AppCompatActivity(), CellClickListener {
         val recepiList = getRecepiList()
         var myDataSet: ArrayList<Model> = arrayListOf()
         for (recepi in recepiList) {
-            myDataSet.add(Model(recepi.name, recepi.slogan, 0))
+            myDataSet.add(Model(recepi.name, recepi.slogan,recepi.image))
         }
 
         viewManager = LinearLayoutManager(this)

@@ -13,7 +13,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.recepirow_layout.*
+import com.google.android.material.bottomnavigation.BottomNavigationView
+
 import se.torsteneriksson.recepihandler.service.RecepiHandlerService
 import kotlin.math.roundToInt
 
@@ -132,6 +133,8 @@ class RecepiHandlerMainActivity : AppCompatActivity() {
 
 
     // **************************** Private functions *********************************
+
+
     // Function to establish connections with the service, binding by interface names.
     private fun bindToService() {
 

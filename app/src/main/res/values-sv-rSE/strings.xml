@@ -22,4 +22,7 @@
     <string name="yes">Ja</string>
     <string name="no">Nej</string>
     <string name="recepi_selector_title">Välj recept!</string>
+    <string name="menu_selected">Current</string>
+    <string name="menu_search">Search</string>
+    <string name="menu_home">Home</string>
 </resources>
