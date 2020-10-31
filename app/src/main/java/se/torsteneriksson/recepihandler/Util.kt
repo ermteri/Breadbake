@@ -48,7 +48,7 @@ fun createNotificationChannel(context: Context) {
 }
 
 fun notify(context: Context, title: String, message: String) {
-    val intent = Intent(context, RecepiHandlerMainActivity::class.java).apply {
+    val intent = Intent(context, MainActivity::class.java).apply {
         flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
     }
     val pendingIntent: PendingIntent = PendingIntent.getActivity(context, 0, intent, 0)

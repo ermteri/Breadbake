@@ -8,7 +8,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -32,6 +31,7 @@ class RecepiStepsFragment : Fragment() {
     private var param2: String? = null
     var mRecepiHandler: IRecepiHandlerService? = null
     var mActivity: MainActivity? = null
+    var mIActivity: IMainActivity? = null
 
     private val mBroadcastReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
@@ -58,21 +58,21 @@ class RecepiStepsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-
-
         return inflater.inflate(R.layout.fragment_recepi_steps, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mActivity = activity as MainActivity
-        mRecepiHandler = mActivity?.getRecepiHanlderService()
+        mIActivity = activity as IMainActivity
+        mRecepiHandler = mIActivity?.getRecepiHandlerService()
         val button: ImageButton = mActivity?.findViewById(R.id.id_next) as ImageButton
         button.setOnClickListener(object : View.OnClickListener {
-            override fun onClick(v: View) {
-                next(v)
+            override fun onClick(view: View) {
+                next(view)
             }
         })
+        updateGui()
     }
 
     companion object {
@@ -107,8 +107,6 @@ class RecepiStepsFragment : Fragment() {
 
     // Private methods
     private fun updateGui() {
-        val title = mActivity?.findViewById<TextView>(R.id.id_recepi_title)
-        val overallDescription = mActivity?.findViewById<TextView>(R.id.id_overall_description)
         val stepinstruction = mActivity?.findViewById<TextView>(R.id.id_stepinstruction)
         val progressbar = mActivity?.findViewById<ProgressBar>(R.id.id_step_progress)
         val timer = mActivity?.findViewById<TextView>(R.id.id_timer)
@@ -121,5 +119,4 @@ class RecepiStepsFragment : Fragment() {
             progressbar?.setProgress(recepi.progress().roundToInt())
         }
     }
-
 }

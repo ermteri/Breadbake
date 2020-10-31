@@ -16,6 +16,15 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.recepirow_layout.*
 
 
+interface CellClickListener {
+    fun onCellClickListener(data: Model)
+}
+
+class Model(
+    val recepiName: String?,
+    val recepiSlogan: String?,
+    val recepiImage: Int
+)
 
 /**
  * A simple [Fragment] subclass.

@@ -48,7 +48,7 @@ class RecepiHandlerService() : Service() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun getMyActivityNotification(title: String, message: String, alarm: Boolean): Notification {
         val pendingIntent =
-            Intent(this, RecepiHandlerMainActivity::class.java).let { notificationIntent ->
+            Intent(this, MainActivity::class.java).let { notificationIntent ->
                 PendingIntent.getActivity(this, 0, notificationIntent, 0)
             }
         if (alarm) {

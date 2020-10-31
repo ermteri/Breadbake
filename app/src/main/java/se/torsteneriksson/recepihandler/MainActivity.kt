@@ -11,22 +11,22 @@ import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentTransaction
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import se.torsteneriksson.recepihandler.service.RecepiHandlerService
 import java.security.KeyStore
+private const val TOP_FRAGEMENT = "top_fragment"
+private const val BOTTOM_FRAGEMENT = "bottom_fragment"
 
+interface IMainActivity {
+    fun setCurrentRecepi(recepiName: String)
+    fun getRecepiHandlerService(): IRecepiHandlerService?
+}
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), IMainActivity {
     var bottomNavigationView: BottomNavigationView? = null
     var mRecepiHandler: IRecepiHandlerService? = null
-    var mCurrentRecepi: Recepi? = null
 
-    private val mBroadcastReceiver: BroadcastReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context?, intent: Intent?) {
-            val textView: TextView = findViewById<TextView>(R.id.id_timer)
-            textView.setText(intent?.getStringExtra("Message"))
-        }
-    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -38,7 +38,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
         bindToService()
-        registerReceiver(mBroadcastReceiver, IntentFilter("se.torsteneriksson.recepihandler.countdown_br"));
     }
 
 
@@ -53,7 +52,9 @@ class MainActivity : AppCompatActivity() {
             mRecepiHandler = IRecepiHandlerService.Stub.asInterface(service)
             if (mRecepiHandler?.recepi == null)
                 bottomNavigationView?.menu?.findItem(R.id.action_selected)?.isEnabled = false
-
+            else {
+                bottomNavigationView?.setSelectedItemId(R.id.action_selected)
+            }
         }
         // Called when the connection with the service disconnects unexpectedly
         override fun onServiceDisconnected(className: ComponentName) {
@@ -82,51 +83,59 @@ class MainActivity : AppCompatActivity() {
         }
 
     // Public methods for fragments
-    fun setCurrentRecepi(recepiName: String) {
+    override fun setCurrentRecepi(recepiName: String) {
         mRecepiHandler?.addRecepi(getRecepi(recepiName))
         startCurrentRecepiFragment()
         bottomNavigationView?.setSelectedItemId(R.id.action_selected)
         bottomNavigationView?.menu?.findItem(R.id.action_selected)?.isEnabled = true
     }
 
-    fun getRecepiHanlderService(): IRecepiHandlerService? {
+    override fun getRecepiHandlerService(): IRecepiHandlerService? {
         return mRecepiHandler
     }
 
     // Private functions
     fun startHomeFragment() {
-        val selectorFragment = RecepiSelectorFragment.newInstance("","")
+        removeFragments()
+        return
+        val homeFragment = RecepiHomeFragment.newInstance("","")
         supportFragmentManager.beginTransaction()
-            .replace(R.id.main_top_frame, selectorFragment).commit()
-        val bottomFragment = supportFragmentManager.findFragmentById(R.id.main_bottom_frame)
-        if (bottomFragment != null)
-            supportFragmentManager.beginTransaction()
-                .remove(bottomFragment).commit()
+            .add(R.id.main_top_frame, homeFragment, TOP_FRAGEMENT).commit()
     }
 
     fun startCurrentRecepiFragment() {
+        removeFragments()
         val recepiName = mRecepiHandler?.recepi?.name
         val recepiDescrition = mRecepiHandler?.recepi?.ingridients
         val image = mRecepiHandler?.recepi?.image
         val descriptionFragment = RecepiDescriptionFragment.newInstance(
             recepiName as String,
-            recepiDescrition as String, image as Int)
+            recepiDescrition as String,
+            image as Int)
         val stepsFragment = RecepiStepsFragment.newInstance("","")
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.main_top_frame, descriptionFragment).commit()
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.main_bottom_frame, stepsFragment).commit()
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.add(R.id.main_top_frame, descriptionFragment, TOP_FRAGEMENT)
+        transaction.add(R.id.main_bottom_frame, stepsFragment, BOTTOM_FRAGEMENT)
+        transaction.commit()
     }
 
     fun startSearchFragment() {
+        removeFragments()
         val selectorFragment = RecepiSelectorFragment.newInstance("","")
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.main_top_frame, selectorFragment).commit()
-        val bottomFragment = supportFragmentManager.findFragmentById(R.id.main_bottom_frame)
-        if (bottomFragment != null)
-            supportFragmentManager.beginTransaction()
-                .remove(bottomFragment).commit()
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.add(R.id.main_top_frame, selectorFragment, TOP_FRAGEMENT)
+        transaction.commit()
     }
+
+    fun removeFragments() {
+        val topFragment = supportFragmentManager.findFragmentByTag(TOP_FRAGEMENT)
+        val bottomFragment = supportFragmentManager.findFragmentByTag(BOTTOM_FRAGEMENT)
+        if (topFragment != null)
+            supportFragmentManager.beginTransaction().remove(topFragment).commit()
+        if (bottomFragment != null)
+            supportFragmentManager.beginTransaction().remove(bottomFragment).commit()
+    }
+
     private fun bindToService() {
         val i = Intent()
         i.setClassName(this.packageName, RecepiHandlerService::class.java.getName())
