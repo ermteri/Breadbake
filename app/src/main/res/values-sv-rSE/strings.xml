@@ -22,8 +22,8 @@
     <string name="yes">Ja</string>
     <string name="no">Nej</string>
     <string name="recepi_selector_title">Välj recept!</string>
-    <string name="menu_selected">Current</string>
-    <string name="menu_search">Search</string>
-    <string name="menu_home">Home</string>
-    <string name="stepinstruction">Click here to start!</string>
+    <string name="menu_selected">Valt</string>
+    <string name="menu_search">Välj</string>
+    <string name="menu_home">Hem</string>
+    <string name="stepinstruction">Tryck här för att starta!</string>
 </resources>

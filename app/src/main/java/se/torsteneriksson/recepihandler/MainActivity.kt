@@ -1,20 +1,21 @@
 package se.torsteneriksson.recepihandler
 
 
-import android.content.*
+import android.content.ComponentName
+import android.content.ContentValues
+import android.content.Intent
+import android.content.ServiceConnection
 import android.os.Bundle
 import android.os.IBinder
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.FragmentTransaction
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import se.torsteneriksson.recepihandler.service.RecepiHandlerService
-import java.security.KeyStore
+
 private const val TOP_FRAGEMENT = "top_fragment"
 private const val BOTTOM_FRAGEMENT = "bottom_fragment"
 
@@ -31,7 +32,10 @@ class MainActivity : AppCompatActivity(), IMainActivity {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         createBottomNavigation()
-        val isRunning: Boolean = isMyServiceRunning(this, RecepiHandlerService::class.java.getName())
+        val isRunning: Boolean = isMyServiceRunning(
+            this,
+            RecepiHandlerService::class.java.getName()
+        )
         if (!isRunning) {
             Intent(this, RecepiHandlerService::class.java).also { intent ->
                 startService(intent)
@@ -68,7 +72,7 @@ class MainActivity : AppCompatActivity(), IMainActivity {
         object : BottomNavigationView.OnNavigationItemSelectedListener {
             override fun onNavigationItemSelected(menuItem: MenuItem): Boolean {
                 when (menuItem.getItemId()) {
-                    R.id.action_home ->     {
+                    R.id.action_home -> {
                         startHomeFragment()
                     }
                     R.id.action_selected -> {
@@ -86,8 +90,8 @@ class MainActivity : AppCompatActivity(), IMainActivity {
     override fun setCurrentRecepi(recepiName: String) {
         mRecepiHandler?.addRecepi(getRecepi(recepiName))
         // Next line will implicitly invoke startCurrentRecepiFragment
-        bottomNavigationView?.setSelectedItemId(R.id.action_selected)
         bottomNavigationView?.menu?.findItem(R.id.action_selected)?.isEnabled = true
+        bottomNavigationView?.setSelectedItemId(R.id.action_selected)
     }
 
     override fun getRecepiHandlerService(): IRecepiHandlerService? {
@@ -97,9 +101,12 @@ class MainActivity : AppCompatActivity(), IMainActivity {
     // Private functions
     fun startHomeFragment() {
         removeFragments()
-        val homeFragment = RecepiHomeFragment.newInstance("","")
+        val homeFragment = RecepiHomeFragment.newInstance("", "")
         supportFragmentManager.beginTransaction()
             .add(R.id.main_top_frame, homeFragment, TOP_FRAGEMENT).commit()
+        // Remove current recepi
+        mRecepiHandler?.addRecepi(null)
+        bottomNavigationView?.menu?.findItem(R.id.action_selected)?.isEnabled = false
     }
 
     fun startCurrentRecepiFragment() {
@@ -110,8 +117,9 @@ class MainActivity : AppCompatActivity(), IMainActivity {
         val descriptionFragment = RecepiDescriptionFragment.newInstance(
             recepiName as String,
             recepiDescrition as String,
-            image as Int)
-        val stepsFragment = RecepiStepsFragment.newInstance("","")
+            image as Int
+        )
+        val stepsFragment = RecepiStepsFragment.newInstance("", "")
         val transaction = supportFragmentManager.beginTransaction()
         transaction.add(R.id.main_top_frame, descriptionFragment, TOP_FRAGEMENT)
         transaction.add(R.id.main_bottom_frame, stepsFragment, BOTTOM_FRAGEMENT)
@@ -120,7 +128,7 @@ class MainActivity : AppCompatActivity(), IMainActivity {
 
     fun startSearchFragment() {
         removeFragments()
-        val selectorFragment = RecepiSelectorFragment.newInstance("","")
+        val selectorFragment = RecepiSelectorFragment.newInstance("", "")
         val transaction = supportFragmentManager.beginTransaction()
         transaction.add(R.id.main_top_frame, selectorFragment, TOP_FRAGEMENT)
         transaction.commit()

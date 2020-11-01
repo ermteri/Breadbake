@@ -66,7 +66,7 @@ class RecepiStepsFragment : Fragment() {
         mActivity = activity as MainActivity
         mIActivity = activity as IMainActivity
         mRecepiHandler = mIActivity?.getRecepiHandlerService()
-        val instruction_tv = mActivity?.findViewById<TextView>(R.id.id_stepinstruction)
+        val instruction_tv = mActivity?.findViewById<ImageButton>(R.id.id_next_step)
         instruction_tv?.setOnClickListener(object : View.OnClickListener {
             override fun onClick(view: View) {
                 next(view)

@@ -19,7 +19,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
-            android:background="@color/primaryLightColor"
+            android:background="@drawable/rounded_corner"
             android:gravity="center"
             android:text="Title"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Headline1"
@@ -35,7 +35,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
-            android:background="@color/primaryLightColor"
+            android:background="@drawable/rounded_corner"
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -48,9 +48,11 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
                 android:text="Description"
+                android:paddingLeft="8dp"
                 android:textColor="@color/primaryTextColor"
-                android:textSize="18sp" />
+                android:textSize="16sp" />
 
             <ImageView
                 android:id="@+id/recepi_picture_img"
@@ -60,8 +62,7 @@
                 android:baselineAlignBottom="false"
                 android:contentDescription="TODO"
                 android:padding="8dp"
-                android:scaleType="centerInside"
-                app:srcCompat="@drawable/ic_baseline_access_alarm_24" />
+                android:scaleType="centerInside"/>
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
