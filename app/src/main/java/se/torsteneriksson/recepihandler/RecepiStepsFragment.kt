@@ -66,8 +66,8 @@ class RecepiStepsFragment : Fragment() {
         mActivity = activity as MainActivity
         mIActivity = activity as IMainActivity
         mRecepiHandler = mIActivity?.getRecepiHandlerService()
-        val button: ImageButton = mActivity?.findViewById(R.id.id_next) as ImageButton
-        button.setOnClickListener(object : View.OnClickListener {
+        val instruction_tv = mActivity?.findViewById<TextView>(R.id.id_stepinstruction)
+        instruction_tv?.setOnClickListener(object : View.OnClickListener {
             override fun onClick(view: View) {
                 next(view)
             }
@@ -112,7 +112,10 @@ class RecepiStepsFragment : Fragment() {
         val timer = mActivity?.findViewById<TextView>(R.id.id_timer)
         var recepi = mRecepiHandler?.getRecepi()
         if (recepi != null) {
-            stepinstruction?.setText(recepi?.getCurrentStep()?.description)
+            if (recepi?.getCurrentStep() == null)
+                stepinstruction?.setText(getString(R.string.stepinstruction))
+             else
+                stepinstruction?.setText(recepi?.getCurrentStep()?.description)
             if (recepi?.getCurrentStep() is RecepiStepPrepare)
                 timer?.setText(getString(R.string.timer))
             val p = recepi.progress()

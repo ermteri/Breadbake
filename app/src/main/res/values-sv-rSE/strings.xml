@@ -25,4 +25,5 @@
     <string name="menu_selected">Current</string>
     <string name="menu_search">Search</string>
     <string name="menu_home">Home</string>
+    <string name="stepinstruction">Click here to start!</string>
 </resources>

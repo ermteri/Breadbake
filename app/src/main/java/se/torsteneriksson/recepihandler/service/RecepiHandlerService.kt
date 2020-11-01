@@ -93,13 +93,11 @@ class RecepiHandlerService() : Service() {
             @RequiresApi(Build.VERSION_CODES.O)
             override fun addRecepi(recepi: Recepi?) {
                 mRecepi = recepi
-                if (recepi == null) {
-                    stopForeground(ONGOING_NOTIFICATION_ID)
-                    mTimer?.cancel()
-                }
-                else
-                    startForeground(ONGOING_NOTIFICATION_ID,
-                        getMyActivityNotification(recepi.name as String, "", false))
+                stopForeground(ONGOING_NOTIFICATION_ID)
+                mTimer?.cancel()
+                if (recepi != null)
+                startForeground(ONGOING_NOTIFICATION_ID,
+                    getMyActivityNotification(recepi.name as String, "", false))
             }
 
             override fun nextStep() {
@@ -111,6 +109,7 @@ class RecepiHandlerService() : Service() {
                     startTimer(mRecepi?.name.toString(), step.time)
                 }
             }
+
             override fun prevStep() {
                 mTimer?.cancel()
                 mRecepi?.prevStep()

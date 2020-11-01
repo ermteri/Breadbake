@@ -85,7 +85,7 @@ class MainActivity : AppCompatActivity(), IMainActivity {
     // Public methods for fragments
     override fun setCurrentRecepi(recepiName: String) {
         mRecepiHandler?.addRecepi(getRecepi(recepiName))
-        startCurrentRecepiFragment()
+        // Next line will implicitly invoke startCurrentRecepiFragment
         bottomNavigationView?.setSelectedItemId(R.id.action_selected)
         bottomNavigationView?.menu?.findItem(R.id.action_selected)?.isEnabled = true
     }
@@ -97,7 +97,6 @@ class MainActivity : AppCompatActivity(), IMainActivity {
     // Private functions
     fun startHomeFragment() {
         removeFragments()
-        return
         val homeFragment = RecepiHomeFragment.newInstance("","")
         supportFragmentManager.beginTransaction()
             .add(R.id.main_top_frame, homeFragment, TOP_FRAGEMENT).commit()
