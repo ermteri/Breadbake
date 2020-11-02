@@ -2,12 +2,15 @@ package se.torsteneriksson.recepihandler
 
 import android.os.Parcel
 import android.os.Parcelable
+import kotlinx.serialization.Serializable
 
+@Serializable
 enum class STEPTYPE {
     TIMER, PREPARE
 }
 
 // This class describes a recepi step
+@Serializable
 open class RecepiStep (open val description: String = "", open val type: STEPTYPE) {
 
 }
@@ -17,12 +20,12 @@ class RecepiStepWait (override val description: String, val time: Long = 0):
 
 }
 
-
 class RecepiStepPrepare (override val description: String):
     RecepiStep(description=description, type=STEPTYPE.PREPARE){
 
 }
 
+@Serializable
 class Recepi(val uid: String?, val name: String?, val slogan: String?, val image: Int, val ingridients: String?,
              val recepiSteps: ArrayList<RecepiStep>): Parcelable {
     constructor(parcel: Parcel) : this(
@@ -76,3 +79,5 @@ class Recepi(val uid: String?, val name: String?, val slogan: String?, val image
         }
     }
 }
+@Serializable
+class RecepiList(val recepies: Array<Recepi>){}

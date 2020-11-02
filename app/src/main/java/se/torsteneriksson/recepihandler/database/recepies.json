@@ -1,0 +1,26 @@
+[
+  {
+    "recepiName": "Valnötsbröd",
+    "slogan": "Detta är ett gott bröd",
+    "ingredients": [
+      {
+        "ingredient": "Mjöl",
+        "amount": ["2dl", "200g"]
+      },
+      {
+        "ingredient": "salt",
+        "amount": ["1,5tsk"]
+      }
+    ],
+    "step": [
+      {
+        "description": "Blanda mjöl",
+        "duration": 0
+      },
+      {
+        "description": "Jäsning",
+        "duration": 3600
+      }
+    ]
+  }
+]

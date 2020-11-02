@@ -14,6 +14,9 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
+import se.torsteneriksson.recepihandler.database.json
 import se.torsteneriksson.recepihandler.service.RecepiHandlerService
 
 private const val TOP_FRAGEMENT = "top_fragment"
@@ -88,6 +91,9 @@ class MainActivity : AppCompatActivity(), IMainActivity {
 
     // Public methods for fragments
     override fun setCurrentRecepi(recepiName: String) {
+        //json()
+        // val rec = getRecepiList()
+        // val string = Json.encodeToString(rec)
         mRecepiHandler?.addRecepi(getRecepi(recepiName))
         // Next line will implicitly invoke startCurrentRecepiFragment
         bottomNavigationView?.menu?.findItem(R.id.action_selected)?.isEnabled = true
