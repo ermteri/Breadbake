@@ -5,12 +5,14 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
+import android.provider.ContactsContract
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import kotlin.math.roundToInt
 
@@ -66,13 +68,20 @@ class RecepiStepsFragment : Fragment() {
         mActivity = activity as MainActivity
         mIActivity = activity as IMainActivity
         mRecepiHandler = mIActivity?.getRecepiHandlerService()
-        val instruction_tv = mActivity?.findViewById<ImageButton>(R.id.id_next_step)
-        instruction_tv?.setOnClickListener(object : View.OnClickListener {
+        val next_step = mActivity?.findViewById<ImageButton>(R.id.id_next_step)
+        val prev_step = mActivity?.findViewById<ImageButton>(R.id.id_prev_step)
+        next_step?.setOnClickListener(object : View.OnClickListener {
             override fun onClick(view: View) {
-                next(view)
+                mRecepiHandler?.nextStep()
+                updateGui()
             }
         })
-        updateGui()
+        prev_step?.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(view: View) {
+                mRecepiHandler?.prevStep()
+                updateGui()
+            }
+        })
     }
 
     companion object {
@@ -96,14 +105,7 @@ class RecepiStepsFragment : Fragment() {
     }
 
     // User interface
-    fun next(view: View) {
-        val textView = mActivity?.findViewById<TextView>(R.id.id_stepinstruction)
-        // Test of step
-        mRecepiHandler?.nextStep()
-        var recepi = mRecepiHandler?.getRecepi()
-        val step = recepi?.getCurrentStep()
-        updateGui()
-    }
+
 
     // Private methods
     private fun updateGui() {
