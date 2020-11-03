@@ -1,4 +1,4 @@
-package se.torsteneriksson.recepihandler
+package se.torsteneriksson.recepihandler.database
 
 import android.os.Parcel
 import android.os.Parcelable

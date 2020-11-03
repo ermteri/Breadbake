@@ -6,8 +6,8 @@ import android.content.Context.ACTIVITY_SERVICE
 import android.content.Context.NOTIFICATION_SERVICE
 import android.content.Intent
 import android.media.RingtoneManager
-import android.os.Build
 import androidx.core.app.NotificationCompat
+import se.torsteneriksson.recepihandler.database.*
 
 const val PICK_RECEPI_REQUEST = 1
 
@@ -107,12 +107,14 @@ fun getRecepi(recepi: String): Recepi? {
 
 fun getValnotsbrod(): Recepi {
     var  recepiSteps = ArrayList<RecepiStep>()
-    recepiSteps.add(RecepiStepPrepare(
+    recepiSteps.add(
+        RecepiStepPrepare(
         """
         Blanda alla ingredienser utom valnötterna. 
         När allt är väl blandat, blanda in valnötterna.
         Låt det sedan jäsa i 30 min.
-        """.trimIndent()))
+        """.trimIndent())
+    )
     recepiSteps.add(RecepiStepWait("Jäsning i 30 min", 1800))
     recepiSteps.add(RecepiStepPrepare("Dags att vika 1:a gången och sedan 30 min jäsning"))
     recepiSteps.add(RecepiStepWait("Jäsning i 30 min", 1800))
@@ -151,11 +153,13 @@ fun getValnotsbrod(): Recepi {
 
 fun getTorstenBrod(): Recepi {
     var  recepiSteps = ArrayList<RecepiStep>()
-    recepiSteps.add(RecepiStepPrepare(
+    recepiSteps.add(
+        RecepiStepPrepare(
         """
         Blanda alla ingredienser. 
         När allt är väl blandat låt jäsa i 8-10 tim (gärna över natten).
-        """.trimIndent()))
+        """.trimIndent())
+    )
     recepiSteps.add(RecepiStepWait("Jäsning i 8-10 timmar", 36000))
     recepiSteps.add(RecepiStepPrepare("Dags att vika 1:a gången och sedan 30 min jäsning"))
     recepiSteps.add(RecepiStepWait("Jäsning i 30 min", 1800))

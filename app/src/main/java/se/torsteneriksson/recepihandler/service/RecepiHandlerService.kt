@@ -16,9 +16,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import se.torsteneriksson.recepihandler.*
-import se.torsteneriksson.recepihandler.Recepi
-import se.torsteneriksson.recepihandler.RecepiStepWait
-import se.torsteneriksson.recepihandler.STEPTYPE
+import se.torsteneriksson.recepihandler.database.*
 
 
 class RecepiHandlerService() : Service() {
