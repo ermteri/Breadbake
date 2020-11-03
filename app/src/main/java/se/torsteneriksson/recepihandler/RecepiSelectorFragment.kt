@@ -1,26 +1,22 @@
 package se.torsteneriksson.recepihandler
 
-import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.recepirow_layout.*
 
 
 interface CellClickListener {
-    fun onCellClickListener(data: Model)
+    fun onCellClickListener(data: RecepiListModel)
 }
 
-class Model(
+class RecepiListModel(
     val recepiName: String?,
     val recepiSlogan: String?,
     val recepiImage: Int
@@ -59,9 +55,9 @@ class RecepiSelectorFragment : Fragment(), CellClickListener  {
         super.onViewCreated(view, savedInstanceState)
         //getSupportActionBar()?.setTitle(getString(R.string.recepi_selector_title))
         val recepiList = getRecepiList()
-        var myDataSet: ArrayList<Model> = arrayListOf()
+        var myDataSet: ArrayList<RecepiListModel> = arrayListOf()
         for (recepi in recepiList) {
-            myDataSet.add(Model(recepi.name, recepi.slogan, recepi.image))
+            myDataSet.add(RecepiListModel(recepi.name, recepi.slogan, recepi.image))
         }
 
         viewManager = LinearLayoutManager(activity)
@@ -80,7 +76,7 @@ class RecepiSelectorFragment : Fragment(), CellClickListener  {
         }
     }
 
-    override fun onCellClickListener(data: Model) {
+    override fun onCellClickListener(data: RecepiListModel) {
         val a = activity as MainActivity
         a.setCurrentRecepi(data.recepiName as String)
     }
@@ -101,7 +97,7 @@ class RecepiSelectorFragment : Fragment(), CellClickListener  {
             }
     }
 }
-class RecepiSelectorAdapter(private val myDataset: ArrayList<Model>, private val cellClickListener: CellClickListener) :
+class RecepiSelectorAdapter(private val myDataset: ArrayList<RecepiListModel>, private val cellClickListener: CellClickListener) :
     RecyclerView.Adapter<RecepiSelectorAdapter.MyViewHolder>() {
 
     // Provide a reference to the views for each data item
