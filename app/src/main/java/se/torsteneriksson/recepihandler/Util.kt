@@ -33,18 +33,16 @@ fun getHumanFriendlyTime(secs: Long): String {
 fun createNotificationChannel(context: Context) {
     // Create the NotificationChannel, but only on API 26+ because
     // the NotificationChannel class is new and not in the support library
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-        val name = context.getString(R.string.channel_name)
-        val descriptionText = context.getString(R.string.channel_description)
-        val importance = NotificationManager.IMPORTANCE_DEFAULT
-        val channel = NotificationChannel(context.getString(R.string.channeld_id), name, importance).apply {
-            description = descriptionText
-        }
-        // Register the channel with the system
-        val notificationManager: NotificationManager =
-            context.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-        notificationManager.createNotificationChannel(channel)
+    val name = context.getString(R.string.channel_name)
+    val descriptionText = context.getString(R.string.channel_description)
+    val importance = NotificationManager.IMPORTANCE_DEFAULT
+    val channel = NotificationChannel(context.getString(R.string.channeld_id), name, importance).apply {
+        description = descriptionText
     }
+    // Register the channel with the system
+    val notificationManager: NotificationManager =
+        context.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+    notificationManager.createNotificationChannel(channel)
 }
 
 fun notify(context: Context, title: String, message: String) {
@@ -133,23 +131,21 @@ fun getValnotsbrod(): Recepi {
     recepiSteps.add(RecepiStepPrepare("Mät tempen och grädda möjligen i ytterligare 5 min"))
     recepiSteps.add(RecepiStepWait("Gräddning i 5 min", 300))
     recepiSteps.add(RecepiStepPrepare("Färdigt!!"))
-    val ingridients: String =
-        """
-        Ingredienser:
-        - Jäst 3g
-        - Vetemjöl special 300g
-        - Vatten 300g
-        - Salt 1,5tsk
-        - Rågmjöl 75g
-        - Valnötter 150g
-        """.trimIndent()
+    var ingredients = ArrayList<Ingredient>()
+    ingredients.add(Ingredient("Jäst", "3g"))
+    ingredients.add(Ingredient("Vetemjöl special", "300g"))
+    ingredients.add(Ingredient("Vatten", "300g"))
+    ingredients.add(Ingredient("Salt", "1,5 tsk"))
+    ingredients.add(Ingredient("Rågmjöl", "75g"))
+    ingredients.add(Ingredient("Valnötter", "150g"))
+
     var recepi: Recepi = Recepi(
-        "id1",
         "Valnötsbröd",
         "Dyrt, men kostar det så smakar det!",
         R.drawable.valnotsbrod,
-        ingridients,
-        recepiSteps)
+        "Description",
+        recepiSteps,
+        ingredients)
     return recepi
 }
 
@@ -174,21 +170,18 @@ fun getTorstenBrod(): Recepi {
     recepiSteps.add(RecepiStepPrepare("Mät tempen och grädda möjligen i ytterligare 5 min"))
     recepiSteps.add(RecepiStepWait("Gräddning i 5 min", 300))
     recepiSteps.add(RecepiStepPrepare("Färdigt!!"))
-    val ingridients: String =
-        """
-        Ingredienser:
-        - Jäst 3g
-        - Vetemjöl special 300g
-        - Vatten 300g
-        - Salt 1,5tsk
-        """.trimIndent()
+
+    var ingredients = ArrayList<Ingredient>()
+    ingredients.add(Ingredient("Jäst", "3g"))
+    ingredients.add(Ingredient("Salt", "1,5 tsk"))
+    ingredients.add(Ingredient("Vetemjöl special", "300g"))
     var recepi: Recepi = Recepi(
-        "id2",
         "Torsten Bröd",
         "Ett enkelt gott bröd",
         R.drawable.torsten_brod,
-        ingridients,
-        recepiSteps)
+        "description",
+        recepiSteps,
+        ingredients)
     return recepi
 }
 

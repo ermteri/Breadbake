@@ -9,34 +9,43 @@ enum class STEPTYPE {
     TIMER, PREPARE
 }
 
+
 // This class describes a recepi step
 @Serializable
-open class RecepiStep (open val description: String = "", open val type: STEPTYPE) {
-
-}
-
-class RecepiStepWait (override val description: String, val time: Long = 0):
-    RecepiStep(description=description, type=STEPTYPE.TIMER){
-
-}
-
-class RecepiStepPrepare (override val description: String):
-    RecepiStep(description=description, type=STEPTYPE.PREPARE){
+sealed class RecepiStep () {
+    abstract val description: String
+    abstract val steptype: STEPTYPE
 
 }
 
 @Serializable
-class Recepi(val uid: String?, val name: String?, val slogan: String?, val image: Int, val ingridients: String?,
-             val recepiSteps: ArrayList<RecepiStep>): Parcelable {
+class RecepiStepWait (override val description: String, val time: Long = 0,
+                      override val steptype: STEPTYPE = STEPTYPE.TIMER
+):
+    RecepiStep(){}
+
+@Serializable
+class RecepiStepPrepare (override val description: String,
+                         override val steptype: STEPTYPE = STEPTYPE.PREPARE
+):
+    RecepiStep(){}
+
+@Serializable
+class Ingredient(val name: String, val amount: String) {}
+
+@Serializable
+class Recepi(val name: String?, val slogan: String?, val image: Int, val description: String?,
+             val recepiSteps: ArrayList<RecepiStep>, val ingredients: ArrayList<Ingredient>):
+    Parcelable {
     constructor(parcel: Parcel) : this(
-        parcel.readString(),
         parcel.readString(),
         parcel.readString(),
         parcel.readInt(),
         parcel.readString(),
-        TODO("recepiSteps")
-    ) {
-    }
+        TODO("recepiSteps"),
+        TODO("ingredients")
+
+    ) {}
     var mCurrentStep: Int = -1
 
     fun getCurrentStep(): RecepiStep? {

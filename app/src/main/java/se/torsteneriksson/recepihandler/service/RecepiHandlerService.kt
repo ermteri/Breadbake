@@ -16,6 +16,9 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import se.torsteneriksson.recepihandler.*
+import se.torsteneriksson.recepihandler.Recepi
+import se.torsteneriksson.recepihandler.RecepiStepWait
+import se.torsteneriksson.recepihandler.STEPTYPE
 
 
 class RecepiHandlerService() : Service() {
@@ -103,7 +106,7 @@ class RecepiHandlerService() : Service() {
             override fun nextStep() {
                 mRecepi?.nextStep()
                 mTimer?.cancel()
-                if (mRecepi?.getCurrentStep()?.type == STEPTYPE.TIMER) {
+                if (mRecepi?.getCurrentStep()?.steptype == STEPTYPE.TIMER) {
                     mTimer?.cancel()
                     val step = mRecepi?.getCurrentStep() as RecepiStepWait
                     startTimer(mRecepi?.name.toString(), step.time)
