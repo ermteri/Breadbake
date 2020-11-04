@@ -145,7 +145,7 @@ fun getValnotsbrod(): Recepi {
         "Valnötsbröd",
         "Dyrt, men kostar det så smakar det!",
         R.drawable.valnotsbrod,
-        "Description",
+        "Ingredienser:",
         recepiSteps,
         ingredients)
     return recepi
@@ -183,7 +183,7 @@ fun getTorstenBrod(): Recepi {
         "Torsten Bröd",
         "Ett enkelt gott bröd",
         R.drawable.torsten_brod,
-        "description",
+        "Det här brödet kan man ta fram när man har gäster.\nIngredienser:",
         recepiSteps,
         ingredients)
     return recepi

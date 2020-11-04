@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginStart="8dp"
-    android:layout_marginEnd="8dp"
+    android:layout_marginStart="1dp"
+    android:layout_marginEnd="1dp"
+    android:layout_marginBottom="0dp"
+    android:layout_marginTop="0dp"
     android:background="@color/primaryLightColor">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+         android:background="@drawable/rounded_corner_variant2">
 
         <TextView
             android:id="@+id/id_ingredient_name"
@@ -31,7 +35,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="2dp"
-            android:layout_marginEnd="8dp"
+            android:layout_marginEnd="0dp"
             android:layout_marginBottom="2dp"
             android:text="Amt"
             android:textColor="@color/primaryTextColor"

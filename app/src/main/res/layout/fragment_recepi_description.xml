@@ -18,7 +18,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
-            android:background="@drawable/rounded_corner"
+            android:background="@drawable/rounded_corner_variant1"
             android:gravity="center"
             android:text="Title"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Headline1"
@@ -35,7 +35,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
-            android:background="@drawable/rounded_corner"
+            android:background="@drawable/rounded_corner_variant1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/recepi_title_tv">
@@ -46,6 +46,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
                 android:orientation="vertical"
                 app:layout_constraintEnd_toStartOf="@id/recepi_picture_img"
                 app:layout_constraintStart_toStartOf="parent"
@@ -55,31 +56,35 @@
                     android:id="@+id/recepi_description_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginBottom="8dp"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="4dp"
+                    android:layout_marginBottom="4dp"
                     android:text="Description"
                     android:textColor="@color/primaryTextColor"
                     android:textSize="16sp" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/id_ingredients_recycler"
+                    android:background="@drawable/rounded_corner_variant1"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_marginBottom="4dp"
+                    android:padding="4dp"
+                    android:layout_height="wrap_content" />
             </LinearLayout>
 
             <ImageView
                 android:id="@+id/recepi_picture_img"
-                android:layout_width="102dp"
-                android:layout_height="83dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
+                android:layout_width="120dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="4dp"
+                android:layout_marginBottom="4dp"
                 android:baselineAlignBottom="false"
                 android:contentDescription="TODO"
-                android:padding="8dp"
+                android:padding="4dp"
                 android:scaleType="centerInside"
+                android:background="@drawable/rounded_corner_variant1"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
