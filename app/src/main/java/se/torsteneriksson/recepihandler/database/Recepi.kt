@@ -69,6 +69,9 @@ class Recepi(val name: String?, val slogan: String?, val image: Int, val descrip
     fun progress(): Float {
         return ((mCurrentStep.toFloat()+1)/recepiSteps.size * 100)
     }
+    fun getCurrenStepId():Int {
+        return mCurrentStep
+    }
 
     override fun describeContents(): Int {
         return 0

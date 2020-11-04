@@ -103,9 +103,6 @@ class RecepiStepsFragment : Fragment() {
             }
     }
 
-    // User interface
-
-
     // Private methods
     private fun updateGui() {
         val stepinstruction = mActivity?.findViewById<TextView>(R.id.id_stepinstruction)
@@ -116,10 +113,10 @@ class RecepiStepsFragment : Fragment() {
             if (recepi?.getCurrentStep() == null)
                 stepinstruction?.setText(getString(R.string.stepinstruction))
              else
-                stepinstruction?.setText(recepi?.getCurrentStep()?.description)
+                stepinstruction?.setText((recepi?.getCurrenStepId() + 1).toString() + ". "
+                        + recepi?.getCurrentStep()?.description)
             if (recepi?.getCurrentStep() is RecepiStepPrepare)
                 timer?.setText(getString(R.string.timer))
-            val p = recepi.progress()
             progressbar?.setProgress(recepi.progress().roundToInt())
         }
     }

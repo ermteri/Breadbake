@@ -1,6 +1,7 @@
 package se.torsteneriksson.recepihandler
 
 
+import android.app.Activity
 import android.content.ComponentName
 import android.content.ContentValues
 import android.content.Intent
@@ -10,7 +11,9 @@ import android.os.IBinder
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Button
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.serialization.encodeToString
@@ -28,6 +31,7 @@ interface IMainActivity {
 class MainActivity : AppCompatActivity(), IMainActivity {
     var bottomNavigationView: BottomNavigationView? = null
     var mRecepiHandler: IRecepiHandlerService? = null
+    var mActivity = Activity()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,6 +47,7 @@ class MainActivity : AppCompatActivity(), IMainActivity {
             }
         }
         bindToService()
+        mActivity = this
     }
 
 
@@ -55,8 +60,10 @@ class MainActivity : AppCompatActivity(), IMainActivity {
 
             Toast.makeText(this@MainActivity, "Connected", Toast.LENGTH_SHORT).show()
             mRecepiHandler = IRecepiHandlerService.Stub.asInterface(service)
-            if (mRecepiHandler?.recepi == null)
+            if (mRecepiHandler?.recepi == null) {
                 bottomNavigationView?.menu?.findItem(R.id.action_selected)?.isEnabled = false
+                bottomNavigationView?.setSelectedItemId(R.id.action_search)
+            }
             else {
                 bottomNavigationView?.setSelectedItemId(R.id.action_selected)
             }
@@ -73,8 +80,16 @@ class MainActivity : AppCompatActivity(), IMainActivity {
         object : BottomNavigationView.OnNavigationItemSelectedListener {
             override fun onNavigationItemSelected(menuItem: MenuItem): Boolean {
                 when (menuItem.getItemId()) {
-                    R.id.action_home -> {
-                        startHomeFragment()
+                    R.id.action_clear -> {
+                        if (mRecepiHandler?.recepi != null) {
+                            val alert = showAlertDialog(
+                                this@MainActivity,
+                                getString(R.string.delete), getString(R.string.delete_recepi)
+                            )
+                            alert.show()
+                            val ok: Button = alert.getButton(AlertDialog.BUTTON_POSITIVE)
+                            ok.setOnClickListener { this@MainActivity.deleteRecepi(alert) }
+                        }
                     }
                     R.id.action_selected -> {
                         startCurrentRecepiFragment()
@@ -103,6 +118,14 @@ class MainActivity : AppCompatActivity(), IMainActivity {
     }
 
     // Private functions
+    fun deleteRecepi(alert: android.app.AlertDialog) {
+        alert.dismiss()
+        removeFragments()
+        mRecepiHandler?.addRecepi(null)
+        bottomNavigationView?.menu?.findItem(R.id.action_selected)?.isEnabled = false
+        bottomNavigationView?.setSelectedItemId(R.id.action_search)
+    }
+
     fun startHomeFragment() {
         removeFragments()
         val homeFragment = RecepiHomeFragment.newInstance("", "")
