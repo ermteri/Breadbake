@@ -7,7 +7,15 @@ import android.content.Context.NOTIFICATION_SERVICE
 import android.content.Intent
 import android.media.RingtoneManager
 import androidx.core.app.NotificationCompat
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import se.torsteneriksson.recepihandler.database.*
+import java.net.URL
 
 const val PICK_RECEPI_REQUEST = 1
 
@@ -67,7 +75,13 @@ fun notify(context: Context, title: String, message: String) {
 }
 
 
-fun getRecepiList(): ArrayList<Recepi> {
+fun getRecepiList(): RecepiFetcher {
+    val recepiFetcher = RecepiFetcher()
+    val rcpList = recepiFetcher.loadRecepi()
+    return recepiFetcher
+}
+
+fun getRecepiListOld(): ArrayList<Recepi> {
     var recepiList: ArrayList<Recepi> = ArrayList()
     recepiList.add(getTorstenBrod())
     recepiList.add(getValnotsbrod())
@@ -203,4 +217,25 @@ fun showAlertDialog(context: Context, title: String, message: String):
     val alert: AlertDialog = alertDialog.create()
     alert.setCanceledOnTouchOutside(false)
     return alert
+}
+
+class RecepiFetcher(): ViewModel() {
+    var mRecepiesJson: String = ""
+
+    fun isRecepiLoaded(): Boolean {
+        return mRecepiesJson != ""
+    }
+
+    fun getRecepi(): RecepiList{
+        return RecepiList(recepies = Json.decodeFromString(mRecepiesJson))
+    }
+    fun loadRecepi() {
+        viewModelScope.launch(Dispatchers.IO) {
+            mRecepiesJson = URL("https://torsteneriksson.se/public/recepies.json").readText()
+        }
+        // val string = Json.encodeToString(rec)
+        //rcpList = Json.decodeFromString(recepiesJson)
+       // val recepies: ArrayList<Recepi> = Json.decodeFromString(mRecepiesJson)
+       // return RecepiList(recepies = recepies)
+    }
 }

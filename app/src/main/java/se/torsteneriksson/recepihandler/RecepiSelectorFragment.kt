@@ -10,6 +10,7 @@ import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import se.torsteneriksson.recepihandler.database.RecepiList
 
 
 interface CellClickListener {
@@ -54,9 +55,12 @@ class RecepiSelectorFragment : Fragment(), CellClickListener  {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         //getSupportActionBar()?.setTitle(getString(R.string.recepi_selector_title))
-        val recepiList = getRecepiList()
+        val recepiFetcher = getRecepiList()
+        var recepiList: RecepiList
+        while (!recepiFetcher.isRecepiLoaded()) {}
+        recepiList = recepiFetcher.getRecepi()
         var myDataSet: ArrayList<RecepiListModel> = arrayListOf()
-        for (recepi in recepiList) {
+        for (recepi in recepiList.recepies) {
             myDataSet.add(RecepiListModel(recepi.name, recepi.slogan, recepi.image))
         }
 

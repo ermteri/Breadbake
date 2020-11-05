@@ -92,4 +92,4 @@ class Recepi(val name: String?, val slogan: String?, val image: Int, val descrip
     }
 }
 @Serializable
-class RecepiList(val recepies: Array<Recepi>){}
+class RecepiList(val recepies: ArrayList<Recepi>){}
