@@ -81,6 +81,7 @@ class RecepiStepsFragment : Fragment() {
                 updateGui()
             }
         })
+        updateGui()
     }
 
     companion object {

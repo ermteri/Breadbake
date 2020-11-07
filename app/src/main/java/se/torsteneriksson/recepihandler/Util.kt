@@ -6,20 +6,23 @@ import android.content.Context.ACTIVITY_SERVICE
 import android.content.Context.NOTIFICATION_SERVICE
 import android.content.Intent
 import android.media.RingtoneManager
+import android.os.Environment
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import se.torsteneriksson.recepihandler.database.*
+import java.io.BufferedWriter
+import java.io.File
+import java.io.FileWriter
 import java.net.URL
 
 const val PICK_RECEPI_REQUEST = 1
 
-fun isMyServiceRunning(context: Context, serviceClass:String): Boolean {
+fun isMyServiceRunning(context: Context, serviceClass: String): Boolean {
     val manager = context.getSystemService(ACTIVITY_SERVICE) as ActivityManager?
     for (service in manager!!.getRunningServices(Int.MAX_VALUE)) {
         if (serviceClass == service.service.className) {
@@ -75,12 +78,6 @@ fun notify(context: Context, title: String, message: String) {
 }
 
 
-fun getRecepiList(): RecepiFetcher {
-    val recepiFetcher = RecepiFetcher()
-    val rcpList = recepiFetcher.loadRecepi()
-    return recepiFetcher
-}
-
 fun getRecepiListOld(): ArrayList<Recepi> {
     var recepiList: ArrayList<Recepi> = ArrayList()
     recepiList.add(getTorstenBrod())
@@ -123,11 +120,12 @@ fun getValnotsbrod(): Recepi {
     var  recepiSteps = ArrayList<RecepiStep>()
     recepiSteps.add(
         RecepiStepPrepare(
-        """
+            """
         Blanda alla ingredienser utom valnötterna. 
         När allt är väl blandat, blanda in valnötterna.
         Låt det sedan jäsa i 30 min.
-        """.trimIndent())
+        """.trimIndent()
+        )
     )
     recepiSteps.add(RecepiStepWait("Jäsning i 30 min", 1800))
     recepiSteps.add(RecepiStepPrepare("Dags att vika 1:a gången och sedan 30 min jäsning"))
@@ -161,7 +159,8 @@ fun getValnotsbrod(): Recepi {
         R.drawable.valnotsbrod,
         "Ingredienser:",
         recepiSteps,
-        ingredients)
+        ingredients
+    )
     return recepi
 }
 
@@ -169,10 +168,11 @@ fun getTorstenBrod(): Recepi {
     var  recepiSteps = ArrayList<RecepiStep>()
     recepiSteps.add(
         RecepiStepPrepare(
-        """
+            """
         Blanda alla ingredienser. 
         När allt är väl blandat låt jäsa i 8-10 tim (gärna över natten).
-        """.trimIndent())
+        """.trimIndent()
+        )
     )
     recepiSteps.add(RecepiStepWait("Jäsning i 8-10 timmar", 36000))
     recepiSteps.add(RecepiStepPrepare("Dags att vika 1:a gången och sedan 30 min jäsning"))
@@ -199,7 +199,8 @@ fun getTorstenBrod(): Recepi {
         R.drawable.torsten_brod,
         "Det här brödet kan man ta fram när man har gäster.\nIngredienser:",
         recepiSteps,
-        ingredients)
+        ingredients
+    )
     return recepi
 }
 
@@ -208,34 +209,11 @@ fun showAlertDialog(context: Context, title: String, message: String):
     val alertDialog: AlertDialog.Builder = AlertDialog.Builder(context)
     alertDialog.setTitle(title)
     alertDialog.setMessage(message)
-    alertDialog.setPositiveButton(context.getString(R.string.yes)) {
-            dialog, whichButton -> dialog.dismiss()
+    alertDialog.setPositiveButton(context.getString(R.string.yes)) { dialog, whichButton -> dialog.dismiss()
     }
-    alertDialog.setNegativeButton(context.getString(R.string.no)) {
-            dialog, whichButton -> dialog.dismiss()
+    alertDialog.setNegativeButton(context.getString(R.string.no)) { dialog, whichButton -> dialog.dismiss()
     }
     val alert: AlertDialog = alertDialog.create()
     alert.setCanceledOnTouchOutside(false)
     return alert
-}
-
-class RecepiFetcher(): ViewModel() {
-    var mRecepiesJson: String = ""
-
-    fun isRecepiLoaded(): Boolean {
-        return mRecepiesJson != ""
-    }
-
-    fun getRecepi(): RecepiList{
-        return RecepiList(recepies = Json.decodeFromString(mRecepiesJson))
-    }
-    fun loadRecepi() {
-        viewModelScope.launch(Dispatchers.IO) {
-            mRecepiesJson = URL("https://torsteneriksson.se/public/recepies.json").readText()
-        }
-        // val string = Json.encodeToString(rec)
-        //rcpList = Json.decodeFromString(recepiesJson)
-       // val recepies: ArrayList<Recepi> = Json.decodeFromString(mRecepiesJson)
-       // return RecepiList(recepies = recepies)
-    }
 }

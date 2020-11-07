@@ -1,9 +1,11 @@
 package se.torsteneriksson.recepihandler
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
@@ -55,10 +57,11 @@ class RecepiSelectorFragment : Fragment(), CellClickListener  {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         //getSupportActionBar()?.setTitle(getString(R.string.recepi_selector_title))
-        val recepiFetcher = getRecepiList()
-        var recepiList: RecepiList
+        val mainActivity = activity as MainActivity
+        val recepiFetcher = mainActivity.mRecepiFetcher
         while (!recepiFetcher.isRecepiLoaded()) {}
-        recepiList = recepiFetcher.getRecepi()
+        //val recepiList = getRecepiListOld()
+        val recepiList = recepiFetcher.getRecepies()
         var myDataSet: ArrayList<RecepiListModel> = arrayListOf()
         for (recepi in recepiList.recepies) {
             myDataSet.add(RecepiListModel(recepi.name, recepi.slogan, recepi.image))
@@ -78,6 +81,13 @@ class RecepiSelectorFragment : Fragment(), CellClickListener  {
             // specify an viewAdapter (see also next example)
             adapter = viewAdapter
         }
+
+        val fetch = activity?.findViewById<ImageButton>(R.id.id_action_fetch)
+        fetch?.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(view: View) {
+                fetch_recepies(mainActivity)
+            }
+        })
     }
 
     override fun onCellClickListener(data: RecepiListModel) {
@@ -85,6 +95,9 @@ class RecepiSelectorFragment : Fragment(), CellClickListener  {
         a.setCurrentRecepi(data.recepiName as String)
     }
 
+    fun fetch_recepies(activity: MainActivity) {
+        activity?.mRecepiFetcher.loadRecepi(true)
+    }
     companion object {
         /**
          * Use this factory method to create a new instance of
@@ -101,6 +114,7 @@ class RecepiSelectorFragment : Fragment(), CellClickListener  {
             }
     }
 }
+
 class RecepiSelectorAdapter(private val myDataset: ArrayList<RecepiListModel>, private val cellClickListener: CellClickListener) :
     RecyclerView.Adapter<RecepiSelectorAdapter.MyViewHolder>() {
 

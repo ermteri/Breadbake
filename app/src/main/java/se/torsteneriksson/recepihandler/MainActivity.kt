@@ -20,6 +20,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import se.torsteneriksson.recepihandler.database.RecepiFetcher
 import se.torsteneriksson.recepihandler.database.RecepiList
 import se.torsteneriksson.recepihandler.service.RecepiHandlerService
 import java.net.URL
@@ -36,6 +37,7 @@ class MainActivity : AppCompatActivity(), IMainActivity {
     var bottomNavigationView: BottomNavigationView? = null
     var mRecepiHandler: IRecepiHandlerService? = null
     var mActivity = Activity()
+    val mRecepiFetcher = RecepiFetcher(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,6 +73,7 @@ class MainActivity : AppCompatActivity(), IMainActivity {
             else {
                 bottomNavigationView?.setSelectedItemId(R.id.action_selected)
             }
+            mRecepiFetcher.loadRecepi()
         }
         // Called when the connection with the service disconnects unexpectedly
         override fun onServiceDisconnected(className: ComponentName) {
@@ -84,6 +87,12 @@ class MainActivity : AppCompatActivity(), IMainActivity {
         object : BottomNavigationView.OnNavigationItemSelectedListener {
             override fun onNavigationItemSelected(menuItem: MenuItem): Boolean {
                 when (menuItem.getItemId()) {
+                    R.id.action_selected -> {
+                        startCurrentRecepiFragment()
+                    }
+                    R.id.action_search -> {
+                        startSearchFragment()
+                    }
                     R.id.action_clear -> {
                         if (mRecepiHandler?.recepi != null) {
                             val alert = showAlertDialog(
@@ -94,12 +103,6 @@ class MainActivity : AppCompatActivity(), IMainActivity {
                             val ok: Button = alert.getButton(AlertDialog.BUTTON_POSITIVE)
                             ok.setOnClickListener { this@MainActivity.deleteRecepi(alert) }
                         }
-                    }
-                    R.id.action_selected -> {
-                        startCurrentRecepiFragment()
-                    }
-                    R.id.action_search -> {
-                        startSearchFragment()
                     }
                 }
                 return true

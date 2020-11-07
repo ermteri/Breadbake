@@ -32,4 +32,5 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="stepinstruction">Click right arrow to start!</string>
     <string name="menu_clear">Delete</string>
+    <string name="menu_fetch">Fetch</string>
 </resources>
