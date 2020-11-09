@@ -5,35 +5,46 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.*
 import kotlinx.serialization.json.Json
 import java.io.File
 import java.net.URL
 
-class RecepiFetcher(context: Context): ViewModel() {
-    // val string = Json.encodeToString(rec)
-    //rcpList = Json.decodeFromString(recepiesJson)
-    // val recepies: ArrayList<Recepi> = Json.decodeFromString(mRecepiesJson)
-    // return RecepiList(recepies = recepies)
+class RecepiList(mContext: Context): ViewModel() {
     val RECEPIES_FILE = "recepies.json"
-    val mContext = context
+    val RECEPIES_URL = "https://torsteneriksson.se/public/recepies.json"
+    lateinit var mRecepiFile: File
+    lateinit var mRecepies: ArrayList<Recepi>
 
-    fun isRecepiLoaded(): Boolean {
-        return File(mContext.filesDir, RECEPIES_FILE).exists()
+    init {
+        this.mRecepiFile =  File(mContext.filesDir, RECEPIES_FILE)
     }
 
-    fun getRecepies(): RecepiList{
-        val file = File(mContext.filesDir, RECEPIES_FILE)
-        return RecepiList(recepies = Json.decodeFromString(file.readText()))
+    fun isRecepieListLoaded(): Boolean {
+        return mRecepiFile.exists()
     }
 
-    fun loadRecepi(force: Boolean = false) {
-        if (isRecepiLoaded() && !force)
+    fun getRecepies(): ArrayList<Recepi> {
+        return mRecepies
+    }
+
+    fun getRecepi(name: String): Recepi? {
+        for (recepi in mRecepies)
+            if (name == recepi.name)
+                return recepi
+        return null
+    }
+
+    fun loadRecepies(refresh: Boolean = false) {
+        if (isRecepieListLoaded() && !refresh) {
+            mRecepies = Json.decodeFromString(mRecepiFile.readText())
             return
+        }
+        mRecepiFile.delete()
         viewModelScope.launch(Dispatchers.IO) {
-            val json_str = URL("https://torsteneriksson.se/public/recepies.json").readText()
-            val file = File(mContext.filesDir, RECEPIES_FILE)
-            file.writeText(json_str)
+            val json_str = URL(RECEPIES_URL).readText()
+            mRecepiFile.writeText(json_str)
+            mRecepies = Json.decodeFromString(mRecepiFile.readText())
         }
     }
 }

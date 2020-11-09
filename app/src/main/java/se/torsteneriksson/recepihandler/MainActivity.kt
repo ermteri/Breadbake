@@ -15,15 +15,9 @@ import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import kotlinx.coroutines.Dispatchers
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
-import se.torsteneriksson.recepihandler.database.RecepiFetcher
 import se.torsteneriksson.recepihandler.database.RecepiList
 import se.torsteneriksson.recepihandler.service.RecepiHandlerService
-import java.net.URL
 
 private const val TOP_FRAGEMENT = "top_fragment"
 private const val BOTTOM_FRAGEMENT = "bottom_fragment"
@@ -37,7 +31,7 @@ class MainActivity : AppCompatActivity(), IMainActivity {
     var bottomNavigationView: BottomNavigationView? = null
     var mRecepiHandler: IRecepiHandlerService? = null
     var mActivity = Activity()
-    val mRecepiFetcher = RecepiFetcher(this)
+    lateinit var mRecepiList: RecepiList
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,7 +46,9 @@ class MainActivity : AppCompatActivity(), IMainActivity {
                 startService(intent)
             }
         }
+        mRecepiList = RecepiList(this)
         bindToService()
+        mRecepiList.loadRecepies(false)
         mActivity = this
     }
 
@@ -73,7 +69,8 @@ class MainActivity : AppCompatActivity(), IMainActivity {
             else {
                 bottomNavigationView?.setSelectedItemId(R.id.action_selected)
             }
-            mRecepiFetcher.loadRecepi()
+            mRecepiList = RecepiList(this@MainActivity)
+            mRecepiList?.loadRecepies()
         }
         // Called when the connection with the service disconnects unexpectedly
         override fun onServiceDisconnected(className: ComponentName) {
@@ -111,7 +108,7 @@ class MainActivity : AppCompatActivity(), IMainActivity {
 
     // Public methods for fragments
     override fun setCurrentRecepi(recepiName: String) {
-        mRecepiHandler?.addRecepi(getRecepi(recepiName))
+        mRecepiHandler?.addRecepi(mRecepiList.getRecepi(recepiName))
         // Next line will implicitly invoke startCurrentRecepiFragment
         bottomNavigationView?.menu?.findItem(R.id.action_selected)?.isEnabled = true
         bottomNavigationView?.setSelectedItemId(R.id.action_selected)
@@ -172,6 +169,11 @@ class MainActivity : AppCompatActivity(), IMainActivity {
             supportFragmentManager.beginTransaction().remove(topFragment).commit()
         if (bottomFragment != null)
             supportFragmentManager.beginTransaction().remove(bottomFragment).commit()
+    }
+
+    fun loadRecepies(force: Boolean): RecepiList{
+        mRecepiList.loadRecepies(force)
+        return mRecepiList
     }
 
     private fun bindToService() {

@@ -1,6 +1,5 @@
 package se.torsteneriksson.recepihandler
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,7 +11,7 @@ import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import se.torsteneriksson.recepihandler.database.RecepiList
+import kotlin.math.max
 
 
 interface CellClickListener {
@@ -30,18 +29,18 @@ class RecepiListModel(
  * Use the [RecepiSelectorFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class RecepiSelectorFragment : Fragment(), CellClickListener  {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var viewAdapter: RecyclerView.Adapter<*>
-    private lateinit var viewManager: RecyclerView.LayoutManager
+class RecepiSelectorFragment : Fragment(), CellClickListener {
+    private lateinit var mRecyclerView: RecyclerView
+    private lateinit var mViewAdapter: RecyclerView.Adapter<*>
+    private lateinit var mViewManager: RecyclerView.LayoutManager
+    private lateinit var mActivity: MainActivity
+    private var mRecepiLoadPending: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
         }
+        mActivity = activity as MainActivity
 
     }
 
@@ -57,47 +56,46 @@ class RecepiSelectorFragment : Fragment(), CellClickListener  {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         //getSupportActionBar()?.setTitle(getString(R.string.recepi_selector_title))
-        val mainActivity = activity as MainActivity
-        val recepiFetcher = mainActivity.mRecepiFetcher
-        while (!recepiFetcher.isRecepiLoaded()) {}
-        //val recepiList = getRecepiListOld()
-        val recepiList = recepiFetcher.getRecepies()
-        var myDataSet: ArrayList<RecepiListModel> = arrayListOf()
-        for (recepi in recepiList.recepies) {
-            myDataSet.add(RecepiListModel(recepi.name, recepi.slogan, recepi.image))
-        }
-
-        viewManager = LinearLayoutManager(activity)
-        viewAdapter = RecepiSelectorAdapter(myDataSet, this)
-
-        recyclerView = requireActivity().findViewById<RecyclerView>(R.id.selector_recycler).apply {
+        val recepiListDataSet = getRecepieListData()
+        mViewManager = LinearLayoutManager(activity)
+        mViewAdapter = RecepiSelectorAdapter(recepiListDataSet, this)
+        mRecyclerView = requireActivity().findViewById<RecyclerView>(R.id.selector_recycler).apply {
             // use this setting to improve performance if you know that changes
             // in content do not change the layout size of the RecyclerView
             setHasFixedSize(true)
 
             // use a linear layout manager
-            layoutManager = viewManager
+            layoutManager = mViewManager
 
             // specify an viewAdapter (see also next example)
-            adapter = viewAdapter
+            adapter = mViewAdapter
         }
-
         val fetch = activity?.findViewById<ImageButton>(R.id.id_action_fetch)
         fetch?.setOnClickListener(object : View.OnClickListener {
             override fun onClick(view: View) {
-                fetch_recepies(mainActivity)
+                updateRecepiList()
             }
         })
     }
 
     override fun onCellClickListener(data: RecepiListModel) {
-        val a = activity as MainActivity
-        a.setCurrentRecepi(data.recepiName as String)
+        mActivity.setCurrentRecepi(data.recepiName as String)
     }
 
-    fun fetch_recepies(activity: MainActivity) {
-        activity?.mRecepiFetcher.loadRecepi(true)
+    fun getRecepieListData(): ArrayList<RecepiListModel> {
+        var myDataSet: ArrayList<RecepiListModel> = arrayListOf()
+        for (recepi in mActivity.mRecepiList.getRecepies()) {
+                myDataSet.add(RecepiListModel(recepi.name, recepi.slogan, recepi.image))
+        }
+        return myDataSet
     }
+
+    fun updateRecepiList() {
+        mActivity.mRecepiList.loadRecepies(true)
+        val myDataSet = getRecepieListData()
+        (mViewAdapter as RecepiSelectorAdapter).updateDataSet(myDataSet)
+    }
+
     companion object {
         /**
          * Use this factory method to create a new instance of
@@ -115,26 +113,34 @@ class RecepiSelectorFragment : Fragment(), CellClickListener  {
     }
 }
 
-class RecepiSelectorAdapter(private val myDataset: ArrayList<RecepiListModel>, private val cellClickListener: CellClickListener) :
+class RecepiSelectorAdapter(
+    private var myDataset: ArrayList<RecepiListModel>,
+    private val cellClickListener: CellClickListener
+) :
     RecyclerView.Adapter<RecepiSelectorAdapter.MyViewHolder>() {
+
+    fun updateDataSet(data: ArrayList<RecepiListModel>) {
+        myDataset = data
+        notifyDataSetChanged()
+    }
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder.
     // Each data item is just a string in this case that is shown in a TextView.
-    class MyViewHolder(val rowView: CardView) : RecyclerView.ViewHolder(rowView){
+    class MyViewHolder(val rowView: CardView) : RecyclerView.ViewHolder(rowView) {
 
     }
 
-
     // Create new views (invoked by the layout manager)
-    override fun onCreateViewHolder(parent: ViewGroup,
-                                    viewType: Int): RecepiSelectorAdapter.MyViewHolder {
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): RecepiSelectorAdapter.MyViewHolder {
         // create a new view
         val rowView = LayoutInflater.from(parent.context)
             .inflate(R.layout.recepirow_layout, parent, false) as CardView
         // set the view's size, margins, paddings and layout parameters
-
         return MyViewHolder(rowView)
     }
 
@@ -157,4 +163,5 @@ class RecepiSelectorAdapter(private val myDataset: ArrayList<RecepiListModel>, p
 
     // Return the size of your dataset (invoked by the layout manager)
     override fun getItemCount() = myDataset.size
+
 }
