@@ -41,7 +41,7 @@ class RecepiHandlerService : Service() {
                 PendingIntent.getActivity(this, 0, notificationIntent, 0)
             }
         if (alarm) {
-            val soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE)
+            val soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
             return NotificationCompat.Builder(this, getString(R.string.channeld_id))
                 .setContentTitle(title)
                 .setContentText(message)
@@ -49,16 +49,16 @@ class RecepiHandlerService : Service() {
                 .setContentIntent(pendingIntent)
                 .setSound(soundUri)
                 .setOnlyAlertOnce(false)
-                //.setTicker(getText(R.string.timer))
                 .build()
         } else {
+            val soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
             return NotificationCompat.Builder(this, getString(R.string.channeld_id))
                 .setContentTitle(title)
                 .setContentText(message)
                 .setOnlyAlertOnce(true)
+                .setSound(soundUri)
                 .setSmallIcon(R.drawable.ic_baseline_fastfood_24)
                 .setContentIntent(pendingIntent)
-                //.setTicker(getText(R.string.timer))
                 .build()
         }
     }
@@ -69,6 +69,8 @@ class RecepiHandlerService : Service() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun updateNotification(title: String, message: String, alarm: Boolean) {
         val notification = getMyActivityNotification(title, message, alarm)
+        if (alarm)
+            notification.flags = Notification.FLAG_INSISTENT or Notification.FLAG_AUTO_CANCEL
         val mNotificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         mNotificationManager.notify(ONGOING_NOTIFICATION_ID, notification)
     }
@@ -132,7 +134,7 @@ class RecepiHandlerService : Service() {
                 val extra: String? = mRecepi?.getCurrentStep()?.description
                 mBroadcastIntent.putExtra("Message", time)
                 sendBroadcast(mBroadcastIntent)
-                updateNotification(title, "$extra:$time", false)
+                updateNotification(title, "$extra:$time", false, )
             }
 
             @RequiresApi(Build.VERSION_CODES.O)
@@ -140,7 +142,7 @@ class RecepiHandlerService : Service() {
                 val message: String = mRecepi?.getCurrentStep()?.description + ": "+  getString(R.string.finished)
                 mBroadcastIntent.putExtra("Message", message)
                 sendBroadcast(mBroadcastIntent)
-                notify(applicationContext, getString(R.string.alarmTitle), getString(R.string.alarmMessage))
+                //notify(applicationContext, getString(R.string.alarmTitle), getString(R.string.alarmMessage))
                 updateNotification(title, message,true)
                 mRecepi?.nextStep()
             }
