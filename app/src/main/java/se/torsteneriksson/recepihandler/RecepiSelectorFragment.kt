@@ -45,6 +45,10 @@ class RecepiSelectorFragment : Fragment(), CellClickListener {
 
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
