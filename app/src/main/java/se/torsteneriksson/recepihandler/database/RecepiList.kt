@@ -5,27 +5,36 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.*
 import kotlinx.serialization.json.Json
 import java.io.File
 import java.net.URL
 
-class RecepiList(mContext: Context): ViewModel() {
+class RecepiList(context: Context) : ViewModel() {
     val RECEPIES_FILE = "recepies.json"
     val RECEPIES_URL = "https://torsteneriksson.se/public/recepies.json"
-    lateinit var mRecepiFile: File
+    val mRecepiFile: File
+    val mContext: Context
     lateinit var mRecepies: ArrayList<Recepi>
 
     init {
-        this.mRecepiFile =  File(mContext.filesDir, RECEPIES_FILE)
+        mContext = context
+        this.mRecepiFile = File(mContext.filesDir, RECEPIES_FILE)
+        if (isRecepieListLoaded())
+            mRecepies = Json.decodeFromString(mRecepiFile.readText())
     }
 
     fun isRecepieListLoaded(): Boolean {
         return mRecepiFile.exists()
     }
 
-    fun getRecepies(): ArrayList<Recepi> {
-        return mRecepies
+    fun getRecepies(): ArrayList<Recepi>? {
+        if (isRecepieListLoaded())
+            return mRecepies
+        else
+            return null
     }
 
     fun getRecepi(name: String): Recepi? {
@@ -35,20 +44,15 @@ class RecepiList(mContext: Context): ViewModel() {
         return null
     }
 
-    fun loadRecepies(refresh: Boolean = false) {
-        if (isRecepieListLoaded() && !refresh) {
-            mRecepies = Json.decodeFromString(mRecepiFile.readText())
-            return
-        }
-        mRecepiFile.delete()
-        viewModelScope.launch(Dispatchers.IO) {
+    suspend fun refresh() =
+        // Dispatchers.Main
+        withContext(Dispatchers.IO) {
+            mRecepiFile.delete()
             val json_str = URL(RECEPIES_URL).readText()
             mRecepiFile.writeText(json_str)
             mRecepies = Json.decodeFromString(mRecepiFile.readText())
         }
-    }
 }
-
 
 
 /*

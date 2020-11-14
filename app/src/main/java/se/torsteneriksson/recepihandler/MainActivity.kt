@@ -16,6 +16,9 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import se.torsteneriksson.recepihandler.database.RecepiList
 import se.torsteneriksson.recepihandler.service.RecepiHandlerService
 
@@ -47,8 +50,8 @@ class MainActivity : AppCompatActivity(), IMainActivity {
             }
         }
         mRecepiList = RecepiList(this)
+        //updateRecepiList()
         bindToService()
-        mRecepiList.loadRecepies(false)
         mActivity = this
     }
 
@@ -69,8 +72,6 @@ class MainActivity : AppCompatActivity(), IMainActivity {
             else {
                 bottomNavigationView?.setSelectedItemId(R.id.action_selected)
             }
-            mRecepiList = RecepiList(this@MainActivity)
-            mRecepiList?.loadRecepies()
         }
         // Called when the connection with the service disconnects unexpectedly
         override fun onServiceDisconnected(className: ComponentName) {
@@ -119,6 +120,13 @@ class MainActivity : AppCompatActivity(), IMainActivity {
     }
 
     // Private functions
+    fun updateRecepiList() {
+        GlobalScope.launch (Dispatchers.Main) {
+            mRecepiList.refresh()
+        }
+    }
+
+
     fun deleteRecepi(alert: android.app.AlertDialog) {
         alert.dismiss()
         removeFragments()
@@ -169,11 +177,6 @@ class MainActivity : AppCompatActivity(), IMainActivity {
             supportFragmentManager.beginTransaction().remove(topFragment).commit()
         if (bottomFragment != null)
             supportFragmentManager.beginTransaction().remove(bottomFragment).commit()
-    }
-
-    fun loadRecepies(force: Boolean): RecepiList{
-        mRecepiList.loadRecepies(force)
-        return mRecepiList
     }
 
     private fun bindToService() {

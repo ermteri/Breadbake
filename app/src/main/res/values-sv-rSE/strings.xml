@@ -28,4 +28,5 @@
     <string name="stepinstruction">Tryck höger pil för att starta!</string>
     <string name="menu_clear">Rensa</string>
     <string name="menu_fetch">Fetch</string>
+    <string name="loaded">New recepies loaded!</string>
 </resources>

@@ -1,17 +1,20 @@
 package se.torsteneriksson.recepihandler
 
 import android.os.Bundle
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlin.math.max
+import kotlinx.coroutines.*
 
 
 interface CellClickListener {
@@ -70,10 +73,14 @@ class RecepiSelectorFragment : Fragment(), CellClickListener {
             // specify an viewAdapter (see also next example)
             adapter = mViewAdapter
         }
+
         val fetch = activity?.findViewById<ImageButton>(R.id.id_action_fetch)
         fetch?.setOnClickListener(object : View.OnClickListener {
             override fun onClick(view: View) {
-                updateRecepiList()
+                GlobalScope.launch (Dispatchers.Main) {
+                    mActivity.mRecepiList.refresh()
+                    updateRecepiList()
+                }
             }
         })
     }
@@ -84,16 +91,34 @@ class RecepiSelectorFragment : Fragment(), CellClickListener {
 
     fun getRecepieListData(): ArrayList<RecepiListModel> {
         var myDataSet: ArrayList<RecepiListModel> = arrayListOf()
-        for (recepi in mActivity.mRecepiList.getRecepies()) {
+        val recepies = mActivity.mRecepiList.getRecepies()
+        if (recepies != null)
+            for (recepi in recepies) {
                 myDataSet.add(RecepiListModel(recepi.name, recepi.slogan, recepi.image))
-        }
+            }
         return myDataSet
     }
 
     fun updateRecepiList() {
-        mActivity.mRecepiList.loadRecepies(true)
-        val myDataSet = getRecepieListData()
+        var myDataSet: ArrayList<RecepiListModel>
+        myDataSet = getRecepieListData()
         (mViewAdapter as RecepiSelectorAdapter).updateDataSet(myDataSet)
+    }
+
+    fun updateRecepiList1() {
+        val thread: Thread = object : Thread() {
+            override fun run() {
+                //mActivity.mRecepiList.refresh()
+                var myDataSet: ArrayList<RecepiListModel>
+                myDataSet = getRecepieListData()
+                (mViewAdapter as RecepiSelectorAdapter).updateDataSet(myDataSet)
+                Looper.prepare()
+                Toast.makeText(mActivity, mActivity.getString(R.string.loaded), Toast.LENGTH_SHORT)
+                    .show()
+                Looper.loop()
+            }
+        }
+        thread.start()
     }
 
     companion object {

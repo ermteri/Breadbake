@@ -33,4 +33,5 @@
     <string name="stepinstruction">Click right arrow to start!</string>
     <string name="menu_clear">Delete</string>
     <string name="menu_fetch">Fetch</string>
+    <string name="loaded">New recepies loaded!</string>
 </resources>
