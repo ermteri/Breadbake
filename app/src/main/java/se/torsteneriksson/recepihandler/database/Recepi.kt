@@ -44,8 +44,7 @@ class Recepi(val name: String?, val slogan: String?, val image: Int, val descrip
         parcel.readString(),
         TODO("recepiSteps"),
         TODO("ingredients")
-
-    ) {}
+    )
     var mCurrentStep: Int = -1
 
     fun getCurrentStep(): RecepiStep? {

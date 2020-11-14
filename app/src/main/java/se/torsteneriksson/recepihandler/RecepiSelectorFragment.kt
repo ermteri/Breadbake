@@ -37,7 +37,6 @@ class RecepiSelectorFragment : Fragment(), CellClickListener {
     private lateinit var mViewAdapter: RecyclerView.Adapter<*>
     private lateinit var mViewManager: RecyclerView.LayoutManager
     private lateinit var mActivity: MainActivity
-    private var mRecepiLoadPending: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -105,22 +104,6 @@ class RecepiSelectorFragment : Fragment(), CellClickListener {
         (mViewAdapter as RecepiSelectorAdapter).updateDataSet(myDataSet)
     }
 
-    fun updateRecepiList1() {
-        val thread: Thread = object : Thread() {
-            override fun run() {
-                //mActivity.mRecepiList.refresh()
-                var myDataSet: ArrayList<RecepiListModel>
-                myDataSet = getRecepieListData()
-                (mViewAdapter as RecepiSelectorAdapter).updateDataSet(myDataSet)
-                Looper.prepare()
-                Toast.makeText(mActivity, mActivity.getString(R.string.loaded), Toast.LENGTH_SHORT)
-                    .show()
-                Looper.loop()
-            }
-        }
-        thread.start()
-    }
-
     companion object {
         /**
          * Use this factory method to create a new instance of
@@ -130,7 +113,7 @@ class RecepiSelectorFragment : Fragment(), CellClickListener {
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
+        fun newInstance() =
             RecepiSelectorFragment().apply {
                 arguments = Bundle().apply {
                 }

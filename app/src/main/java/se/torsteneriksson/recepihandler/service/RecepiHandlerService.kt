@@ -96,9 +96,14 @@ class RecepiHandlerService() : Service() {
                 mRecepi = recepi
                 stopForeground(ONGOING_NOTIFICATION_ID)
                 mTimer?.cancel()
-                if (recepi != null)
-                startForeground(ONGOING_NOTIFICATION_ID,
-                    getMyActivityNotification(recepi.name as String, "", false))
+                if (recepi != null) {
+                    startForeground(
+                        ONGOING_NOTIFICATION_ID,
+                        getMyActivityNotification(recepi.name as String, "", false)
+                    )
+                    // Reset the step counter
+                    mRecepi?.mCurrentStep = -1
+                }
             }
 
             override fun nextStep() {

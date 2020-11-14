@@ -209,9 +209,9 @@ fun showAlertDialog(context: Context, title: String, message: String):
     val alertDialog: AlertDialog.Builder = AlertDialog.Builder(context)
     alertDialog.setTitle(title)
     alertDialog.setMessage(message)
-    alertDialog.setPositiveButton(context.getString(R.string.yes)) { dialog, whichButton -> dialog.dismiss()
+    alertDialog.setPositiveButton(context.getString(R.string.yes)) { dialog, _ -> dialog.dismiss()
     }
-    alertDialog.setNegativeButton(context.getString(R.string.no)) { dialog, whichButton -> dialog.dismiss()
+    alertDialog.setNegativeButton(context.getString(R.string.no)) { dialog, _ -> dialog.dismiss()
     }
     val alert: AlertDialog = alertDialog.create()
     alert.setCanceledOnTouchOutside(false)

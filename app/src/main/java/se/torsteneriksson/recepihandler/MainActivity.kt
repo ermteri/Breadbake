@@ -135,27 +135,10 @@ class MainActivity : AppCompatActivity(), IMainActivity {
         bottomNavigationView?.setSelectedItemId(R.id.action_search)
     }
 
-    fun startHomeFragment() {
-        removeFragments()
-        val homeFragment = RecepiHomeFragment.newInstance("", "")
-        supportFragmentManager.beginTransaction()
-            .add(R.id.main_top_frame, homeFragment, TOP_FRAGEMENT).commit()
-        // Remove current recepi
-        mRecepiHandler?.addRecepi(null)
-        bottomNavigationView?.menu?.findItem(R.id.action_selected)?.isEnabled = false
-    }
-
     fun startCurrentRecepiFragment() {
         removeFragments()
-        val recepiName = mRecepiHandler?.recepi?.name
-        val recepiDescrition = mRecepiHandler?.recepi?.description
-        val image = mRecepiHandler?.recepi?.image
-        val descriptionFragment = RecepiDescriptionFragment.newInstance(
-            recepiName as String,
-            recepiDescrition as String,
-            image as Int
-        )
-        val stepsFragment = RecepiStepsFragment.newInstance("", "")
+        val descriptionFragment = RecepiDescriptionFragment.newInstance()
+        val stepsFragment = RecepiStepsFragment.newInstance()
         val transaction = supportFragmentManager.beginTransaction()
         transaction.add(R.id.main_top_frame, descriptionFragment, TOP_FRAGEMENT)
         transaction.add(R.id.main_bottom_frame, stepsFragment, BOTTOM_FRAGEMENT)
@@ -164,7 +147,7 @@ class MainActivity : AppCompatActivity(), IMainActivity {
 
     fun startSearchFragment() {
         removeFragments()
-        val selectorFragment = RecepiSelectorFragment.newInstance("", "")
+        val selectorFragment = RecepiSelectorFragment.newInstance()
         val transaction = supportFragmentManager.beginTransaction()
         transaction.add(R.id.main_top_frame, selectorFragment, TOP_FRAGEMENT)
         transaction.commit()

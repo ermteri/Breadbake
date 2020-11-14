@@ -85,7 +85,7 @@ class RecepiDescriptionFragment : Fragment() {
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(title: String, description: String, img_id: Int) =
+        fun newInstance() =
             RecepiDescriptionFragment().apply {
                 arguments = Bundle().apply {
                 }

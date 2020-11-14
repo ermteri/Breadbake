@@ -1,25 +1,354 @@
 [
   {
-    "recepiName": "Valnötsbröd",
-    "slogan": "Detta är ett gott bröd",
-    "ingredients": [
+    "name": "Torsten Bröd",
+    "slogan": "Ett enkelt gott bröd",
+    "image": 2131165323,
+    "description": "description",
+    "recepiSteps": [
       {
-        "ingredient": "Mjöl",
-        "amount": ["2dl", "200g"]
+        "type": "se.torsteneriksson.recepihandler.database.RecepiStepPrepare",
+        "description": "Blanda alla ingredienser. \nNär allt är väl blandat låt jäsa i 8-10 tim (gärna över natten)."
       },
       {
-        "ingredient": "salt",
-        "amount": ["1,5tsk"]
+        "type": "se.torsteneriksson.recepihandler.database.RecepiStepWait",
+        "description": "Jäsning i 8-10 timmar",
+        "time": 36000
+      },
+      {
+        "type": "se.torsteneriksson.recepihandler.database.RecepiStepPrepare",
+        "description": "Dags att vika 1:a gången och sedan 30 min jäsning"
+      },
+      {
+        "type": "se.torsteneriksson.recepihandler.database.RecepiStepWait",
+        "description": "Jäsning i 30 min",
+        "time": 1800
+      },
+      {
+        "type": "se.torsteneriksson.recepihandler.database.RecepiStepPrepare",
+        "description": "Baka ut och grädda i 15 min"
+      },
+      {
+        "type": "se.torsteneriksson.recepihandler.database.RecepiStepWait",
+        "description": "Gräddning i 15 min",
+        "time": 900
+      },
+      {
+        "type": "se.torsteneriksson.recepihandler.database.RecepiStepPrepare",
+        "description": "Vädra!"
+      },
+      {
+        "type": "se.torsteneriksson.recepihandler.database.RecepiStepWait",
+        "description": "Gräddning i 5 min",
+        "time": 300
+      },
+      {
+        "type": "se.torsteneriksson.recepihandler.database.RecepiStepPrepare",
+        "description": "Vädra"
+      },
+      {
+        "type": "se.torsteneriksson.recepihandler.database.RecepiStepWait",
+        "description": "Gräddning i 5 min",
+        "time": 300
+      },
+      {
+        "type": "se.torsteneriksson.recepihandler.database.RecepiStepPrepare",
+        "description": "Vädra"
+      },
+      {
+        "type": "se.torsteneriksson.recepihandler.database.RecepiStepWait",
+        "description": "Gräddning i 5 min",
+        "time": 300
+      },
+      {
+        "type": "se.torsteneriksson.recepihandler.database.RecepiStepPrepare",
+        "description": "Mät tempen och grädda möjligen i ytterligare 5 min"
+      },
+      {
+        "type": "se.torsteneriksson.recepihandler.database.RecepiStepWait",
+        "description": "Gräddning i 5 min",
+        "time": 300
+      },
+      {
+        "type": "se.torsteneriksson.recepihandler.database.RecepiStepPrepare",
+        "description": "Färdigt!!"
       }
     ],
-    "step": [
+    "ingredients": [
       {
-        "description": "Blanda mjöl",
-        "duration": 0
+        "name": "Jäst",
+        "amount": "3g"
       },
       {
-        "description": "Jäsning",
-        "duration": 3600
+        "name": "Salt",
+        "amount": "1,5 tsk"
+      },
+      {
+        "name": "Vetemjöl special",
+        "amount": "300g"
+      }
+    ]
+  },
+  {
+    "name": "Valnötsbröd",
+    "slogan": "Dyrt, men kostar det så smakar det!",
+    "image": 2131165324,
+    "description": "Description",
+    "recepiSteps": [
+      {
+        "type": "se.torsteneriksson.recepihandler.database.RecepiStepPrepare",
+        "description": "Blanda alla ingredienser utom valnötterna. \nNär allt är väl blandat, blanda in valnötterna.\nLåt det sedan jäsa i 30 min."
+      },
+      {
+        "type": "se.torsteneriksson.recepihandler.database.RecepiStepWait",
+        "description": "Jäsning i 30 min",
+        "time": 1800
+      },
+      {
+        "type": "se.torsteneriksson.recepihandler.database.RecepiStepPrepare",
+        "description": "Dags att vika 1:a gången och sedan 30 min jäsning"
+      },
+      {
+        "type": "se.torsteneriksson.recepihandler.database.RecepiStepWait",
+        "description": "Jäsning i 30 min",
+        "time": 1800
+      },
+      {
+        "type": "se.torsteneriksson.recepihandler.database.RecepiStepPrepare",
+        "description": "Dags att vika 2:a gången och sedan 30 min jäsning"
+      },
+      {
+        "type": "se.torsteneriksson.recepihandler.database.RecepiStepWait",
+        "description": "Jäsning i 30 min",
+        "time": 1800
+      },
+      {
+        "type": "se.torsteneriksson.recepihandler.database.RecepiStepPrepare",
+        "description": "Dags att vika, 3:e och sista gången och sedan 1 tim jäsning"
+      },
+      {
+        "type": "se.torsteneriksson.recepihandler.database.RecepiStepWait",
+        "description": "Jäsning i 1 timme",
+        "time": 3600
+      },
+      {
+        "type": "se.torsteneriksson.recepihandler.database.RecepiStepPrepare",
+        "description": "Baka ut och sedan 1 tim jäsning"
+      },
+      {
+        "type": "se.torsteneriksson.recepihandler.database.RecepiStepWait",
+        "description": "Jäsning 1 timme",
+        "time": 900
+      },
+      {
+        "type": "se.torsteneriksson.recepihandler.database.RecepiStepPrepare",
+        "description": "Vänd och för över till plåt och grädda i 15 min"
+      },
+      {
+        "type": "se.torsteneriksson.recepihandler.database.RecepiStepWait",
+        "description": "Gräddning i 15 min",
+        "time": 900
+      },
+      {
+        "type": "se.torsteneriksson.recepihandler.database.RecepiStepPrepare",
+        "description": "Vädra!"
+      },
+      {
+        "type": "se.torsteneriksson.recepihandler.database.RecepiStepWait",
+        "description": "Gräddning i 5 min",
+        "time": 300
+      },
+      {
+        "type": "se.torsteneriksson.recepihandler.database.RecepiStepPrepare",
+        "description": "Vädra"
+      },
+      {
+        "type": "se.torsteneriksson.recepihandler.database.RecepiStepWait",
+        "description": "Gräddning i 5 min",
+        "time": 300
+      },
+      {
+        "type": "se.torsteneriksson.recepihandler.database.RecepiStepPrepare",
+        "description": "Vädra"
+      },
+      {
+        "type": "se.torsteneriksson.recepihandler.database.RecepiStepWait",
+        "description": "Gräddning i 5 min",
+        "time": 300
+      },
+      {
+        "type": "se.torsteneriksson.recepihandler.database.RecepiStepPrepare",
+        "description": "Mät tempen och grädda möjligen i ytterligare 5 min"
+      },
+      {
+        "type": "se.torsteneriksson.recepihandler.database.RecepiStepWait",
+        "description": "Gräddning i 5 min",
+        "time": 300
+      },
+      {
+        "type": "se.torsteneriksson.recepihandler.database.RecepiStepPrepare",
+        "description": "Färdigt!!"
+      }
+    ],
+    "ingredients": [
+      {
+        "name": "Jäst",
+        "amount": "3g"
+      },
+      {
+        "name": "Vetemjöl special",
+        "amount": "300g"
+      },
+      {
+        "name": "Vatten",
+        "amount": "300g"
+      },
+      {
+        "name": "Salt",
+        "amount": "1,5 tsk"
+      },
+      {
+        "name": "Rågmjöl",
+        "amount": "75g"
+      },
+      {
+        "name": "Valnötter",
+        "amount": "150g"
+      }
+    ]
+  },
+  {
+    "name": "Rågrussin",
+    "slogan": "Sött och gott!",
+    "image": 2131165324,
+    "description": "Description",
+    "recepiSteps": [
+      {
+        "type": "se.torsteneriksson.recepihandler.database.RecepiStepPrepare",
+        "description": "Blanda alla ingredienser utom valnötterna. \nNär allt är väl blandat, blanda in valnötterna.\nLåt det sedan jäsa i 30 min."
+      },
+      {
+        "type": "se.torsteneriksson.recepihandler.database.RecepiStepWait",
+        "description": "Jäsning i 30 min",
+        "time": 1800
+      },
+      {
+        "type": "se.torsteneriksson.recepihandler.database.RecepiStepWait",
+        "description": "Jäsning i 30 min",
+        "time": 1800
+      },
+      {
+        "type": "se.torsteneriksson.recepihandler.database.RecepiStepPrepare",
+        "description": "Dags att vika, 3:e och sista gången och sedan 1 tim jäsning"
+      },
+      {
+        "type": "se.torsteneriksson.recepihandler.database.RecepiStepWait",
+        "description": "Jäsning i 1 timme",
+        "time": 3600
+      },
+      {
+        "type": "se.torsteneriksson.recepihandler.database.RecepiStepPrepare",
+        "description": "Baka ut och grädda i 15 min"
+      },
+      {
+        "type": "se.torsteneriksson.recepihandler.database.RecepiStepWait",
+        "description": "Gräddning i 15 min",
+        "time": 900
+      },
+      {
+        "type": "se.torsteneriksson.recepihandler.database.RecepiStepPrepare",
+        "description": "Vädra!"
+      },
+      {
+        "type": "se.torsteneriksson.recepihandler.database.RecepiStepWait",
+        "description": "Gräddning i 5 min",
+        "time": 300
+      },
+      {
+        "type": "se.torsteneriksson.recepihandler.database.RecepiStepPrepare",
+        "description": "Vädra"
+      },
+      {
+        "type": "se.torsteneriksson.recepihandler.database.RecepiStepWait",
+        "description": "Gräddning i 5 min",
+        "time": 300
+      },
+      {
+        "type": "se.torsteneriksson.recepihandler.database.RecepiStepPrepare",
+        "description": "Vädra"
+      },
+      {
+        "type": "se.torsteneriksson.recepihandler.database.RecepiStepWait",
+        "description": "Gräddning i 5 min",
+        "time": 300
+      },
+      {
+        "type": "se.torsteneriksson.recepihandler.database.RecepiStepPrepare",
+        "description": "Mät tempen och grädda möjligen i ytterligare 5 min"
+      },
+      {
+        "type": "se.torsteneriksson.recepihandler.database.RecepiStepWait",
+        "description": "Gräddning i 5 min",
+        "time": 300
+      },
+      {
+        "type": "se.torsteneriksson.recepihandler.database.RecepiStepPrepare",
+        "description": "Färdigt!!"
+      }
+    ],
+    "ingredients": [
+      {
+        "name": "Jäst",
+        "amount": "3g"
+      },
+      {
+        "name": "Vetemjöl special",
+        "amount": "300g"
+      },
+      {
+        "name": "Vatten",
+        "amount": "300g"
+      },
+      {
+        "name": "Salt",
+        "amount": "1,5 tsk"
+      },
+      {
+        "name": "Russin",
+        "amount": "100g"
+      }
+    ]
+  },
+  {
+    "name": "Mammas frallor",
+    "slogan": "Till kaffet!",
+    "image": 2131165324,
+    "description": "Ingredienser",
+    "recepiSteps": [
+      {
+        "type": "se.torsteneriksson.recepihandler.database.RecepiStepPrepare",
+        "description": "Blanda alla ingredienser utom valnötterna. \nNär allt är väl blandat, blanda in valnötterna.\nLåt det sedan jäsa i 30 min."
+      }
+    ],
+    "ingredients": [
+      {
+        "name": "Jäst",
+        "amount": "3g"
+      },
+      {
+        "name": "Vetemjöl special",
+        "amount": "300g"
+      },
+      {
+        "name": "Vatten",
+        "amount": "300g"
+      },
+      {
+        "name": "Salt",
+        "amount": "1,5 tsk"
+      },
+      {
+        "name": "Russin",
+        "amount": "100g"
       }
     ]
   }
