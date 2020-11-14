@@ -27,13 +27,13 @@ import kotlin.math.roundToInt
 class RecepiStepsFragment : Fragment() {
     // TODO: Rename and change types of parameters
     var mRecepiHandler: IRecepiHandlerService? = null
-    var mActivity: MainActivity? = null
-    var mIActivity: IMainActivity? = null
+    private var mActivity: MainActivity? = null
+    private var mIActivity: IMainActivity? = null
 
     private val mBroadcastReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             val textView = activity?.findViewById<TextView>(R.id.id_timer)
-            textView?.setText(intent?.getStringExtra("Message"))
+            textView?.text = intent?.getStringExtra("Message")
             updateGui()
         }
     }
@@ -45,7 +45,7 @@ class RecepiStepsFragment : Fragment() {
         activity?.registerReceiver(
             mBroadcastReceiver,
             IntentFilter("se.torsteneriksson.recepihandler.countdown_br")
-        );
+        )
     }
 
     override fun onCreateView(
@@ -83,8 +83,6 @@ class RecepiStepsFragment : Fragment() {
          * Use this factory method to create a new instance of
          * this fragment using the provided parameters.
          *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
          * @return A new instance of fragment RecepiStepsFragment.
          */
         // TODO: Rename and change types and number of parameters
@@ -101,16 +99,16 @@ class RecepiStepsFragment : Fragment() {
         val stepinstruction = mActivity?.findViewById<TextView>(R.id.id_stepinstruction)
         val progressbar = mActivity?.findViewById<ProgressBar>(R.id.id_step_progress)
         val timer = mActivity?.findViewById<TextView>(R.id.id_timer)
-        var recepi = mRecepiHandler?.getRecepi()
+        val recepi = mRecepiHandler?.recepi
         if (recepi != null) {
             if (recepi.getCurrentStep() == null)
-                stepinstruction?.setText(getString(R.string.stepinstruction))
+                stepinstruction?.text = getString(R.string.stepinstruction)
              else
-                stepinstruction?.setText((recepi.getCurrenStepId() + 1).toString() + ". "
+                stepinstruction?.text = ((recepi.getCurrenStepId() + 1).toString() + ". "
                         + recepi.getCurrentStep()?.description)
             if (recepi.getCurrentStep() is RecepiStepPrepare)
-                timer?.setText(getString(R.string.timer))
-            progressbar?.setProgress(recepi.progress().roundToInt())
+                timer?.text = getString(R.string.timer)
+            progressbar?.progress = recepi.progress().roundToInt()
         }
     }
 }

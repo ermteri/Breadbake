@@ -1,20 +1,19 @@
 package se.torsteneriksson.recepihandler
 
 import android.os.Bundle
-import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 
 interface CellClickListener {
@@ -88,8 +87,8 @@ class RecepiSelectorFragment : Fragment(), CellClickListener {
         mActivity.setCurrentRecepi(data.recepiName as String)
     }
 
-    fun getRecepieListData(): ArrayList<RecepiListModel> {
-        var myDataSet: ArrayList<RecepiListModel> = arrayListOf()
+    private fun getRecepieListData(): ArrayList<RecepiListModel> {
+        val myDataSet: ArrayList<RecepiListModel> = arrayListOf()
         val recepies = mActivity.mRecepiList.getRecepies()
         if (recepies != null)
             for (recepi in recepies) {
@@ -99,8 +98,7 @@ class RecepiSelectorFragment : Fragment(), CellClickListener {
     }
 
     fun updateRecepiList() {
-        var myDataSet: ArrayList<RecepiListModel>
-        myDataSet = getRecepieListData()
+        val myDataSet: ArrayList<RecepiListModel> = getRecepieListData()
         (mViewAdapter as RecepiSelectorAdapter).updateDataSet(myDataSet)
     }
 
@@ -136,15 +134,13 @@ class RecepiSelectorAdapter(
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder.
     // Each data item is just a string in this case that is shown in a TextView.
-    class MyViewHolder(val rowView: CardView) : RecyclerView.ViewHolder(rowView) {
-
-    }
+    class MyViewHolder(val rowView: CardView) : RecyclerView.ViewHolder(rowView)
 
     // Create new views (invoked by the layout manager)
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): RecepiSelectorAdapter.MyViewHolder {
+    ): MyViewHolder {
         // create a new view
         val rowView = LayoutInflater.from(parent.context)
             .inflate(R.layout.recepirow_layout, parent, false) as CardView
@@ -161,8 +157,8 @@ class RecepiSelectorAdapter(
         val image = holder.rowView.findViewById<ImageView>(R.id.recepi_picture_img)
 
         val data = myDataset[position]
-        title.setText(data.recepiName)
-        slogan.setText(data.recepiSlogan)
+        title.text = data.recepiName
+        slogan.text = data.recepiSlogan
         image.setImageResource(data.recepiImage)
         holder.itemView.setOnClickListener {
             cellClickListener.onCellClickListener(data)

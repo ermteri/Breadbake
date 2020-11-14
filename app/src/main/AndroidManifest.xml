@@ -19,9 +19,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".RecepiSelectorActivity" />
-        <activity android:name=".RecepiHandlerMainActivity">
-        </activity>
 
         <service android:name=".service.RecepiHandlerService" />
     </application>

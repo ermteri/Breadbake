@@ -2,39 +2,35 @@ package se.torsteneriksson.recepihandler.database
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
-import kotlinx.serialization.*
+import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import java.io.File
 import java.net.URL
 
 class RecepiList(context: Context) : ViewModel() {
-    val RECEPIES_FILE = "recepies.json"
-    val RECEPIES_URL = "https://torsteneriksson.se/public/recepies.json"
-    val mRecepiFile: File
-    val mContext: Context
-    lateinit var mRecepies: ArrayList<Recepi>
+    private val RECEPIES_FILE = "recepies.json"
+    private val RECEPIES_URL = "https://torsteneriksson.se/public/recepies.json"
+    private val mRecepiFile: File
+    private val mContext: Context = context
+    private lateinit var mRecepies: ArrayList<Recepi>
 
     init {
-        mContext = context
         this.mRecepiFile = File(mContext.filesDir, RECEPIES_FILE)
         if (isRecepieListLoaded())
             mRecepies = Json.decodeFromString(mRecepiFile.readText())
     }
 
-    fun isRecepieListLoaded(): Boolean {
+    private fun isRecepieListLoaded(): Boolean {
         return mRecepiFile.exists()
     }
 
     fun getRecepies(): ArrayList<Recepi>? {
-        if (isRecepieListLoaded())
-            return mRecepies
+        return if (isRecepieListLoaded())
+            mRecepies
         else
-            return null
+            null
     }
 
     fun getRecepi(name: String): Recepi? {

@@ -16,9 +16,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import se.torsteneriksson.recepihandler.database.RecepiList
 import se.torsteneriksson.recepihandler.service.RecepiHandlerService
 
@@ -33,7 +30,7 @@ interface IMainActivity {
 class MainActivity : AppCompatActivity(), IMainActivity {
     var bottomNavigationView: BottomNavigationView? = null
     var mRecepiHandler: IRecepiHandlerService? = null
-    var mActivity = Activity()
+    private var mActivity = Activity()
     lateinit var mRecepiList: RecepiList
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,7 +39,7 @@ class MainActivity : AppCompatActivity(), IMainActivity {
         createBottomNavigation()
         val isRunning: Boolean = isMyServiceRunning(
             this,
-            RecepiHandlerService::class.java.getName()
+            RecepiHandlerService::class.java.name
         )
         if (!isRunning) {
             Intent(this, RecepiHandlerService::class.java).also { intent ->
@@ -57,7 +54,7 @@ class MainActivity : AppCompatActivity(), IMainActivity {
 
 
     // Private methods
-    val mConnection = object : ServiceConnection {
+    private val mConnection = object : ServiceConnection {
         // Called when the connection with the service is established
         override fun onServiceConnected(className: ComponentName, service: IBinder) {
             // Following the example above for an AIDL interface,
@@ -67,10 +64,10 @@ class MainActivity : AppCompatActivity(), IMainActivity {
             mRecepiHandler = IRecepiHandlerService.Stub.asInterface(service)
             if (mRecepiHandler?.recepi == null) {
                 bottomNavigationView?.menu?.findItem(R.id.action_selected)?.isEnabled = false
-                bottomNavigationView?.setSelectedItemId(R.id.action_search)
+                bottomNavigationView?.selectedItemId = R.id.action_search
             }
             else {
-                bottomNavigationView?.setSelectedItemId(R.id.action_selected)
+                bottomNavigationView?.selectedItemId = R.id.action_selected
             }
         }
         // Called when the connection with the service disconnects unexpectedly
@@ -84,7 +81,7 @@ class MainActivity : AppCompatActivity(), IMainActivity {
     private val navigationItemSelectedListener: BottomNavigationView.OnNavigationItemSelectedListener =
         object : BottomNavigationView.OnNavigationItemSelectedListener {
             override fun onNavigationItemSelected(menuItem: MenuItem): Boolean {
-                when (menuItem.getItemId()) {
+                when (menuItem.itemId) {
                     R.id.action_selected -> {
                         startCurrentRecepiFragment()
                     }
@@ -112,18 +109,11 @@ class MainActivity : AppCompatActivity(), IMainActivity {
         mRecepiHandler?.addRecepi(mRecepiList.getRecepi(recepiName))
         // Next line will implicitly invoke startCurrentRecepiFragment
         bottomNavigationView?.menu?.findItem(R.id.action_selected)?.isEnabled = true
-        bottomNavigationView?.setSelectedItemId(R.id.action_selected)
+        bottomNavigationView?.selectedItemId = R.id.action_selected
     }
 
     override fun getRecepiHandlerService(): IRecepiHandlerService? {
         return mRecepiHandler
-    }
-
-    // Private functions
-    fun updateRecepiList() {
-        GlobalScope.launch (Dispatchers.Main) {
-            mRecepiList.refresh()
-        }
     }
 
 
@@ -132,7 +122,7 @@ class MainActivity : AppCompatActivity(), IMainActivity {
         removeFragments()
         mRecepiHandler?.addRecepi(null)
         bottomNavigationView?.menu?.findItem(R.id.action_selected)?.isEnabled = false
-        bottomNavigationView?.setSelectedItemId(R.id.action_search)
+        bottomNavigationView?.selectedItemId = R.id.action_search
     }
 
     fun startCurrentRecepiFragment() {
@@ -153,7 +143,7 @@ class MainActivity : AppCompatActivity(), IMainActivity {
         transaction.commit()
     }
 
-    fun removeFragments() {
+    private fun removeFragments() {
         val topFragment = supportFragmentManager.findFragmentByTag(TOP_FRAGEMENT)
         val bottomFragment = supportFragmentManager.findFragmentByTag(BOTTOM_FRAGEMENT)
         if (topFragment != null)
@@ -164,7 +154,7 @@ class MainActivity : AppCompatActivity(), IMainActivity {
 
     private fun bindToService() {
         val i = Intent()
-        i.setClassName(this.packageName, RecepiHandlerService::class.java.getName())
+        i.setClassName(this.packageName, RecepiHandlerService::class.java.name)
         val bindResult = bindService(i, mConnection, BIND_AUTO_CREATE)
         if (bindResult) {
             Toast.makeText(this@MainActivity, "Bounded!", Toast.LENGTH_SHORT).show()
@@ -172,7 +162,7 @@ class MainActivity : AppCompatActivity(), IMainActivity {
     }
 
     private fun createBottomNavigation() {
-        bottomNavigationView = findViewById(R.id.bottom_navigation) as BottomNavigationView
+        bottomNavigationView = findViewById(R.id.bottom_navigation)
         val menu: Menu = bottomNavigationView!!.menu
         menu.clear()
         bottomNavigationView?.inflateMenu(R.menu.bottom_navigation_menu)

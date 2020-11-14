@@ -6,21 +6,8 @@ import android.content.Context.ACTIVITY_SERVICE
 import android.content.Context.NOTIFICATION_SERVICE
 import android.content.Intent
 import android.media.RingtoneManager
-import android.os.Environment
 import androidx.core.app.NotificationCompat
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.json.Json
 import se.torsteneriksson.recepihandler.database.*
-import java.io.BufferedWriter
-import java.io.File
-import java.io.FileWriter
-import java.net.URL
-
-const val PICK_RECEPI_REQUEST = 1
 
 fun isMyServiceRunning(context: Context, serviceClass: String): Boolean {
     val manager = context.getSystemService(ACTIVITY_SERVICE) as ActivityManager?
@@ -34,10 +21,10 @@ fun isMyServiceRunning(context: Context, serviceClass: String): Boolean {
 
 fun getHumanFriendlyTime(secs: Long): String {
     val hours: String = String.format("%02d", secs / 3600)
-    var minutes: String = String.format("%02d", (secs % 3600) / 60)
-    var seconds: String = String.format("%02d", secs % 60)
+    val minutes: String = String.format("%02d", (secs % 3600) / 60)
+    val seconds: String = String.format("%02d", secs % 60)
 
-    return hours + ":" + minutes + ":" + seconds
+    return "$hours:$minutes:$seconds"
 }
 
 
@@ -77,132 +64,6 @@ fun notify(context: Context, title: String, message: String) {
     notificationManager.notify(0, notification)
 }
 
-
-fun getRecepiListOld(): ArrayList<Recepi> {
-    var recepiList: ArrayList<Recepi> = ArrayList()
-    recepiList.add(getTorstenBrod())
-    recepiList.add(getValnotsbrod())
-    recepiList.add(getTorstenBrod())
-    recepiList.add(getValnotsbrod())
-    recepiList.add(getTorstenBrod())
-    recepiList.add(getValnotsbrod())
-    recepiList.add(getTorstenBrod())
-    recepiList.add(getValnotsbrod())
-    recepiList.add(getTorstenBrod())
-    recepiList.add(getValnotsbrod())
-    recepiList.add(getTorstenBrod())
-    recepiList.add(getValnotsbrod())
-    recepiList.add(getTorstenBrod())
-    recepiList.add(getValnotsbrod())
-    recepiList.add(getTorstenBrod())
-    recepiList.add(getValnotsbrod())
-    recepiList.add(getTorstenBrod())
-    recepiList.add(getValnotsbrod())
-    recepiList.add(getTorstenBrod())
-    recepiList.add(getValnotsbrod())
-    recepiList.add(getTorstenBrod())
-    recepiList.add(getValnotsbrod())
-    recepiList.add(getTorstenBrod())
-    recepiList.add(getValnotsbrod())
-
-    return recepiList
-}
-
-fun getRecepi(recepi: String): Recepi? {
-    when(recepi){
-        "Valnötsbröd" -> return getValnotsbrod()
-        "Torsten Bröd" -> return getTorstenBrod()
-        else -> return null
-    }
-}
-
-fun getValnotsbrod(): Recepi {
-    var  recepiSteps = ArrayList<RecepiStep>()
-    recepiSteps.add(
-        RecepiStepPrepare(
-            """
-        Blanda alla ingredienser utom valnötterna. 
-        När allt är väl blandat, blanda in valnötterna.
-        Låt det sedan jäsa i 30 min.
-        """.trimIndent()
-        )
-    )
-    recepiSteps.add(RecepiStepWait("Jäsning i 30 min", 1800))
-    recepiSteps.add(RecepiStepPrepare("Dags att vika 1:a gången och sedan 30 min jäsning"))
-    recepiSteps.add(RecepiStepWait("Jäsning i 30 min", 1800))
-    recepiSteps.add(RecepiStepPrepare("Dags att vika 2:a gången och sedan 30 min jäsning"))
-    recepiSteps.add(RecepiStepWait("Jäsning i 30 min", 1800))
-    recepiSteps.add(RecepiStepPrepare("Dags att vika, 3:e och sista gången och sedan 1 tim jäsning"))
-    recepiSteps.add(RecepiStepWait("Jäsning i 1 timme", 3600))
-    recepiSteps.add(RecepiStepPrepare("Baka ut och grädda i 15 min"))
-    recepiSteps.add(RecepiStepWait("Gräddning i 15 min", 900))
-    recepiSteps.add(RecepiStepPrepare("Vädra!"))
-    recepiSteps.add(RecepiStepWait("Gräddning i 5 min", 300))
-    recepiSteps.add(RecepiStepPrepare("Vädra"))
-    recepiSteps.add(RecepiStepWait("Gräddning i 5 min", 300))
-    recepiSteps.add(RecepiStepPrepare("Vädra"))
-    recepiSteps.add(RecepiStepWait("Gräddning i 5 min", 300))
-    recepiSteps.add(RecepiStepPrepare("Mät tempen och grädda möjligen i ytterligare 5 min"))
-    recepiSteps.add(RecepiStepWait("Gräddning i 5 min", 300))
-    recepiSteps.add(RecepiStepPrepare("Färdigt!!"))
-    var ingredients = ArrayList<Ingredient>()
-    ingredients.add(Ingredient("Jäst", "3g"))
-    ingredients.add(Ingredient("Vetemjöl special", "300g"))
-    ingredients.add(Ingredient("Vatten", "300g"))
-    ingredients.add(Ingredient("Salt", "1,5 tsk"))
-    ingredients.add(Ingredient("Rågmjöl", "75g"))
-    ingredients.add(Ingredient("Valnötter", "150g"))
-
-    var recepi: Recepi = Recepi(
-        "Valnötsbröd",
-        "Dyrt, men kostar det så smakar det!",
-        R.drawable.valnotsbrod,
-        "Ingredienser:",
-        recepiSteps,
-        ingredients
-    )
-    return recepi
-}
-
-fun getTorstenBrod(): Recepi {
-    var  recepiSteps = ArrayList<RecepiStep>()
-    recepiSteps.add(
-        RecepiStepPrepare(
-            """
-        Blanda alla ingredienser. 
-        När allt är väl blandat låt jäsa i 8-10 tim (gärna över natten).
-        """.trimIndent()
-        )
-    )
-    recepiSteps.add(RecepiStepWait("Jäsning i 8-10 timmar", 36000))
-    recepiSteps.add(RecepiStepPrepare("Dags att vika 1:a gången och sedan 30 min jäsning"))
-    recepiSteps.add(RecepiStepWait("Jäsning i 30 min", 1800))
-    recepiSteps.add(RecepiStepPrepare("Baka ut och grädda i 15 min"))
-    recepiSteps.add(RecepiStepWait("Gräddning i 15 min", 900))
-    recepiSteps.add(RecepiStepPrepare("Vädra!"))
-    recepiSteps.add(RecepiStepWait("Gräddning i 5 min", 300))
-    recepiSteps.add(RecepiStepPrepare("Vädra"))
-    recepiSteps.add(RecepiStepWait("Gräddning i 5 min", 300))
-    recepiSteps.add(RecepiStepPrepare("Vädra"))
-    recepiSteps.add(RecepiStepWait("Gräddning i 5 min", 300))
-    recepiSteps.add(RecepiStepPrepare("Mät tempen och grädda möjligen i ytterligare 5 min"))
-    recepiSteps.add(RecepiStepWait("Gräddning i 5 min", 300))
-    recepiSteps.add(RecepiStepPrepare("Färdigt!!"))
-
-    var ingredients = ArrayList<Ingredient>()
-    ingredients.add(Ingredient("Jäst", "3g"))
-    ingredients.add(Ingredient("Salt", "1,5 tsk"))
-    ingredients.add(Ingredient("Vetemjöl special", "300g"))
-    var recepi: Recepi = Recepi(
-        "Torsten Bröd",
-        "Ett enkelt gott bröd",
-        R.drawable.torsten_brod,
-        "Det här brödet kan man ta fram när man har gäster.\nIngredienser:",
-        recepiSteps,
-        ingredients
-    )
-    return recepi
-}
 
 fun showAlertDialog(context: Context, title: String, message: String):
         AlertDialog {

@@ -12,7 +12,7 @@ enum class STEPTYPE {
 
 // This class describes a recepi step
 @Serializable
-sealed class RecepiStep () {
+sealed class RecepiStep {
     abstract val description: String
     abstract val steptype: STEPTYPE
 
@@ -22,20 +22,20 @@ sealed class RecepiStep () {
 class RecepiStepWait (override val description: String, val time: Long = 0,
                       override val steptype: STEPTYPE = STEPTYPE.TIMER
 ):
-    RecepiStep(){}
+    RecepiStep()
 
 @Serializable
 class RecepiStepPrepare (override val description: String,
                          override val steptype: STEPTYPE = STEPTYPE.PREPARE
 ):
-    RecepiStep(){}
+    RecepiStep()
 
 @Serializable
-class Ingredient(val name: String, val amount: String) {}
+class Ingredient(val name: String, val amount: String)
 
 @Serializable
 class Recepi(val name: String?, val slogan: String?, val image: Int, val description: String?,
-             val recepiSteps: ArrayList<RecepiStep>, val ingredients: ArrayList<Ingredient>):
+             private val recepiSteps: ArrayList<RecepiStep>, val ingredients: ArrayList<Ingredient>):
     Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString(),

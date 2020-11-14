@@ -5,7 +5,6 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
 import android.content.ContentValues.TAG
-import android.content.Context
 import android.content.Intent
 import android.media.RingtoneManager
 import android.os.Build
@@ -14,32 +13,21 @@ import android.os.IBinder
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
-import androidx.core.content.ContextCompat
 import se.torsteneriksson.recepihandler.*
-import se.torsteneriksson.recepihandler.database.*
+import se.torsteneriksson.recepihandler.database.Recepi
+import se.torsteneriksson.recepihandler.database.RecepiStepWait
+import se.torsteneriksson.recepihandler.database.STEPTYPE
 
 
-class RecepiHandlerService() : Service() {
+class RecepiHandlerService : Service() {
     //var mRecepi = Recepi("","",ArrayList())
     var mRecepi: Recepi? = null
-    val COUNTDOWN_BR = "se.torsteneriksson.recepihandler.countdown_br"
+    private val COUNTDOWN_BR = "se.torsteneriksson.recepihandler.countdown_br"
     var mBroadcastIntent = Intent(COUNTDOWN_BR)
     var mTimer: CountDownTimer? = null
     val ONGOING_NOTIFICATION_ID = 1
 
-    companion object {
-
-        fun startService(context: Context, message: String) {
-            val startIntent = Intent(context, RecepiHandlerService::class.java)
-            startIntent.putExtra("inputExtra", message)
-            ContextCompat.startForegroundService(context, startIntent)
-        }
-
-        fun stopService(context: Context) {
-            val stopIntent = Intent(context, RecepiHandlerService::class.java)
-            context.stopService(stopIntent)
-        }
-    }
+    companion object;
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         return super.onStartCommand(intent, flags.or(START_STICKY), startId)
@@ -144,13 +132,13 @@ class RecepiHandlerService() : Service() {
                 val extra: String? = mRecepi?.getCurrentStep()?.description
                 mBroadcastIntent.putExtra("Message", time)
                 sendBroadcast(mBroadcastIntent)
-                updateNotification(title, extra + ":" +  time, false)
+                updateNotification(title, "$extra:$time", false)
             }
 
             @RequiresApi(Build.VERSION_CODES.O)
             override fun onFinish() {
                 val message: String = mRecepi?.getCurrentStep()?.description + ": "+  getString(R.string.finished)
-                mBroadcastIntent.putExtra("Message", message);
+                mBroadcastIntent.putExtra("Message", message)
                 sendBroadcast(mBroadcastIntent)
                 notify(applicationContext, getString(R.string.alarmTitle), getString(R.string.alarmMessage))
                 updateNotification(title, message,true)

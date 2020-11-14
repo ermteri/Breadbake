@@ -1,37 +1,25 @@
 <resources>
     <string name="app_name">Recepi Handler</string>
-    <string name="prev">Prev</string>
-    <string name="next">Next</string>
-    <string name="instruction">Instructions:</string>
-    <string name="timer">00:00:00</string>
-    <string name="fetch">Fetch</string>
-    <string name="clear">Clear</string>
-    <string name="no_active_recepi">No active recepi!</string>
-    <string name="recepiTitle">Title</string>
-    <string name="remaining">"Remaining: "</string>
+    <string name="timer" translatable="false">00:00:00</string>
     <string name="finished">Finished!</string>
-    <string name="alarm">Ready</string>
     <string name="alarmTitle">Ready!</string>
     <string name="alarmMessage">Time for next activity!</string>
     <string name="channel_name" translatable="false">RECEPI_NOTIFICATION_CHANNEL</string>
     <string name="channel_description" translatable="false">The notification channel.</string>
     <string name="channeld_id" translatable="false">NOTIFICATION_CHANNEL</string>
-    <string name="svcrunning">Recepi Handler</string>
-    <string name="svcstatus">No recepi</string>
-    <string name="ingridients">Ingridients</string>
-    <string name="todo">TODO</string>
     <string name="delete">Delete recepi</string>
     <string name="delete_recepi">Do you want to delete current recepi?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
-    <string name="recepi_selector_title">Select recepi!</string>
     <string name="menu_selected">Current</string>
     <string name="menu_search">Search</string>
-    <string name="menu_home">Home</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
     <string name="stepinstruction">Click right arrow to start!</string>
     <string name="menu_clear">Delete</string>
-    <string name="menu_fetch">Fetch</string>
-    <string name="loaded">New recepies loaded!</string>
+    <string name="title">Title</string>
+    <string name="slogan">Slogan</string>
+    <string name="description">Description</string>
+    <string name="ingredient">Ingredient</string>
+    <string name="amt">Amt</string>
 </resources>

@@ -1,32 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Recepthanterare</string>
-    <string name="prev">Föregående</string>
-    <string name="next">Nästa</string>
-    <string name="instruction">Instruktioner:</string>
-    <string name="fetch">Hämta</string>
-    <string name="clear">Rensa</string>
-    <string name="no_active_recepi">Inget recept aktivt</string>
-    <string name="recepiTitle">Titel</string>
-    <string name="remaining">"Återstår: "</string>
     <string name="finished">Klar!</string>
-    <string name="alarm">Klart</string>
     <string name="alarmMessage">Dags för nästa aktivitet!</string>
     <string name="alarmTitle">Klart!</string>
-    <string name="svcrunning">Recepthanterare</string>
-    <string name="svcstatus">Tomt</string>
-    <string name="ingridients">Ingredienser</string>
-    <string name="todo">TODO</string>
     <string name="delete">Avsluta recept</string>
     <string name="delete_recepi">Vill du avsluta nuvarande recept?</string>
     <string name="yes">Ja</string>
     <string name="no">Nej</string>
-    <string name="recepi_selector_title">Välj recept!</string>
     <string name="menu_selected">Valt</string>
     <string name="menu_search">Välj</string>
-    <string name="menu_home">Hem</string>
     <string name="stepinstruction">Tryck höger pil för att starta!</string>
     <string name="menu_clear">Rensa</string>
-    <string name="menu_fetch">Fetch</string>
-    <string name="loaded">New recepies loaded!</string>
+    <string name="title">Title</string>
+    <string name="slogan">Slogan</string>
+    <string name="description">Description</string>
+    <string name="ingredient">Ingredient</string>
+    <string name="amt">Amt</string>
 </resources>

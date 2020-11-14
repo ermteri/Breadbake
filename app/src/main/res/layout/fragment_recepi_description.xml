@@ -20,7 +20,7 @@
             android:layout_marginEnd="8dp"
             android:background="@drawable/rounded_corner_variant1"
             android:gravity="center"
-            android:text="Title"
+            android:text="@string/title"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Headline1"
             android:textColor="@color/primaryTextColor"
             android:textSize="30sp"
@@ -29,7 +29,6 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/id_overview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -41,7 +40,6 @@
             app:layout_constraintTop_toBottomOf="@id/recepi_title_tv">
 
             <LinearLayout
-                android:id="@+id/id_description_ingredients"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_marginStart="8dp"
@@ -60,7 +58,7 @@
                     android:layout_marginTop="4dp"
                     android:layout_marginEnd="4dp"
                     android:layout_marginBottom="4dp"
-                    android:text="Description"
+                    android:text="@string/description"
                     android:textColor="@color/primaryTextColor"
                     android:textSize="16sp" />
 
@@ -81,7 +79,6 @@
                 android:layout_marginEnd="4dp"
                 android:layout_marginBottom="4dp"
                 android:baselineAlignBottom="false"
-                android:contentDescription="TODO"
                 android:padding="4dp"
                 android:scaleType="centerInside"
                 android:background="@drawable/rounded_corner_variant1"

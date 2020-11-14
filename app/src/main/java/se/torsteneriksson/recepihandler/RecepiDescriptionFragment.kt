@@ -27,8 +27,8 @@ class RecepiDescriptionFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
     private lateinit var viewManager: RecyclerView.LayoutManager
-    var mRecepiHandler: IRecepiHandlerService? = null
-    var mIActivity: IMainActivity? = null
+    private var mRecepiHandler: IRecepiHandlerService? = null
+    private var mIActivity: IMainActivity? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,12 +50,12 @@ class RecepiDescriptionFragment : Fragment() {
         val image_img = itemView.findViewById<ImageView>(R.id.recepi_picture_img)
         mIActivity = activity as IMainActivity
         mRecepiHandler = mIActivity?.getRecepiHandlerService()
-        val recepi = mRecepiHandler?.getRecepi()
-        title_tv.setText(recepi?.name)
-        description_tv.setText(recepi?.description)
-        image_img.setImageDrawable(itemView.getResources().getDrawable(recepi?.image as Int))
+        val recepi = mRecepiHandler?.recepi
+        title_tv.text = recepi?.name
+        description_tv.text = recepi?.description
+        image_img.setImageDrawable(itemView.resources.getDrawable(recepi?.image as Int))
         // Ingredients
-        var myDataSet: ArrayList<IngrediantListModel> = arrayListOf()
+        val myDataSet: ArrayList<IngrediantListModel> = arrayListOf()
         for (ingredient in recepi.ingredients) {
             myDataSet.add(IngrediantListModel(ingredient.name, ingredient.amount))
         }
@@ -100,14 +100,12 @@ class IngrediantAdapter(private val myDataset: ArrayList<IngrediantListModel>) :
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder.
     // Each data item is just a string in this case that is shown in a TextView.
-    class MyViewHolder(val rowView: CardView) : RecyclerView.ViewHolder(rowView){
-
-    }
+    class MyViewHolder(val rowView: CardView) : RecyclerView.ViewHolder(rowView)
 
 
     // Create new views (invoked by the layout manager)
     override fun onCreateViewHolder(parent: ViewGroup,
-                                    viewType: Int): IngrediantAdapter.MyViewHolder {
+                                    viewType: Int): MyViewHolder {
         // create a new view
         val rowView = LayoutInflater.from(parent.context)
             .inflate(R.layout.ingredient_layout, parent, false) as CardView
@@ -124,8 +122,8 @@ class IngrediantAdapter(private val myDataset: ArrayList<IngrediantListModel>) :
         val amount = holder.rowView.findViewById<TextView>(R.id.id_ingredient_amount)
 
         val data = myDataset[position]
-        name.setText(data.name)
-        amount.setText(data.amount)
+        name.text = data.name
+        amount.text = data.amount
     }
 
     // Return the size of your dataset (invoked by the layout manager)
